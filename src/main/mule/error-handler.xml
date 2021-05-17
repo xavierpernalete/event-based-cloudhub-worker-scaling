@@ -1,0 +1,220 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<mule
+	xmlns:json-logger="http://www.mulesoft.org/schema/mule/json-logger"
+	xmlns:apikit="http://www.mulesoft.org/schema/mule/mule-apikit"
+	xmlns:ee="http://www.mulesoft.org/schema/mule/ee/core"
+	xmlns="http://www.mulesoft.org/schema/mule/core"
+	xmlns:doc="http://www.mulesoft.org/schema/mule/documentation"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="
+http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
+http://www.mulesoft.org/schema/mule/json-logger http://www.mulesoft.org/schema/mule/json-logger/current/mule-json-logger.xsd
+http://www.mulesoft.org/schema/mule/mule-apikit http://www.mulesoft.org/schema/mule/mule-apikit/current/mule-apikit.xsd">
+
+	<import doc:name="Error Handler Callback"
+		file="error-handler-callback.xml" />
+
+	<configuration-properties
+		doc:name="Configuration properties"
+		doc:id="09e5ec75-3b6d-49f1-8cb7-a9fed3c171ed"
+		file="error-handler-properties.yaml" />
+
+	<error-handler name="error-handler"
+		doc:id="3fab8817-9f5e-4758-86a0-702b1bb34075">
+		<on-error-propagate enableNotifications="true"
+			logException="true" doc:name="On Error Propagate"
+			doc:id="e4d44d8d-62fb-4351-817b-6135ff6fecdb"
+			when="#[(error.errorType.identifier contains 'BAD_REQUEST') or (error.errorType.identifier contains 'COMPOSITE_ROUTING') or (error.errorType.namespace == 'VALIDATION')]">
+			<ee:transform doc:name="AMRN-400"
+				doc:id="a7ba18c2-973f-4788-a0f7-cb96a6dee568">
+				<ee:message>
+					<ee:set-payload resource="transformations/error-handler/bad-request.dwl" />
+				
+</ee:message>
+				<ee:variables>
+					<ee:set-variable variableName="httpStatus"><![CDATA['400']]></ee:set-variable>
+				</ee:variables>
+			</ee:transform>
+			<flow-ref doc:name="error-handler-exit"
+				doc:id="abf7bf7e-357b-465c-ae10-b600580e8d88"
+				name="error-handler-exit" />
+
+		</on-error-propagate>
+
+		<on-error-propagate enableNotifications="true"
+			logException="true" doc:name="On Error Propagate"
+			doc:id="4d6669d2-7ce6-4dc2-a187-04c6e2b00e27"
+			when="#[error.errorType.identifier contains 'NOT_FOUND']">
+			<ee:transform doc:name="AMRN-404"
+				doc:id="66c4ce1d-ab2b-4aeb-84c8-4af3656b3a29">
+				<ee:message>
+					<ee:set-payload resource="transformations/error-handler/not-found.dwl" />
+				
+</ee:message>
+				<ee:variables>
+					<ee:set-variable variableName="httpStatus"><![CDATA['404']]></ee:set-variable>
+				</ee:variables>
+			</ee:transform>
+			<flow-ref doc:name="error-handler-exit"
+				doc:id="d58c0865-cf9a-45bd-853e-dbc45ad26656"
+				name="error-handler-exit" />
+		</on-error-propagate>
+
+		<on-error-propagate enableNotifications="true"
+			logException="true" doc:name="On Error Propagate"
+			doc:id="0fc208b9-e529-47c4-8eae-61a5d7487051"
+			type="APIKIT:METHOD_NOT_ALLOWED">
+			<ee:transform doc:name="AMRN-405"
+				doc:id="db3b5a51-4bd5-465b-9590-29ed5660f4f1">
+				<ee:message>
+					<ee:set-payload resource="transformations/error-handler/not-allowed.dwl" />
+				
+</ee:message>
+				<ee:variables>
+					<ee:set-variable variableName="httpStatus"><![CDATA['405']]></ee:set-variable>
+				</ee:variables>
+			</ee:transform>
+			<flow-ref doc:name="error-handler-exit"
+				doc:id="0427b2f9-d3b4-4db0-a38e-e1f1d17a74b2"
+				name="error-handler-exit" />
+		</on-error-propagate>
+
+		<on-error-propagate enableNotifications="true"
+			logException="true" doc:name="On Error Propagate"
+			doc:id="8bfdcaf8-e011-4db3-9767-10d629cd6b16"
+			type="APIKIT:NOT_ACCEPTABLE">
+			<ee:transform doc:name="AMRN-406"
+				doc:id="e14dc7e2-2d78-452a-abad-dfff81afc6b5">
+				<ee:message>
+					<ee:set-payload><![CDATA[%dw 2.0
+output application/json
+---
+{
+  correlationId: correlationId,
+  tracingId: vars.standardSystemAPIHeaders.tracing_id,
+  status: {
+    code: "406",
+    messages: [
+      {
+        "type": "Error",
+        "severity": vars.error.severity default '1',
+        "reasonCode": vars.error.reasonCode default "ADT-406",
+        "message": if(vars.error.description?)   // check for custom message from error variable
+	               	vars.error.description
+	           	   else                         // or from a validation module
+	             	error.description default 'Not Acceptable'
+      }
+    ]
+  } 
+} ]]></ee:set-payload>
+				</ee:message>
+				<ee:variables>
+					<ee:set-variable variableName="httpStatus"><![CDATA['406']]></ee:set-variable>
+				</ee:variables>
+			</ee:transform>
+			<flow-ref doc:name="error-handler-exit"
+				doc:id="e312065a-311d-4a55-9441-c3e614479dbb"
+				name="error-handler-exit" />
+		</on-error-propagate>
+
+		<on-error-propagate enableNotifications="true"
+			logException="true" doc:name="On Error Propagate"
+			doc:id="24e1fb5f-9a99-4f37-888f-f7052b70dafe"
+			type="APIKIT:UNSUPPORTED_MEDIA_TYPE">
+			<ee:transform doc:name="AMRN-415"
+				doc:id="5677f263-0fae-43d8-b135-d4a83233e28b">
+				<ee:message>
+					<ee:set-payload resource="transformations/error-handler/unsupported-media.dwl" />
+				
+</ee:message>
+				<ee:variables>
+					<ee:set-variable variableName="httpStatus"><![CDATA['415']]></ee:set-variable>
+				</ee:variables>
+			</ee:transform>
+			<flow-ref doc:name="error-handler-exit"
+				doc:id="5251221e-3bb7-4f9d-b30c-cffb2c3a8bb0"
+				name="error-handler-exit" />
+		</on-error-propagate>
+
+		<!-- <on-error-propagate enableNotifications="true" logException="true" 
+			doc:name="On Error Propagate" doc:id="4451b57b-7dc0-4213-b1c2-70b79f714696" 
+			when="#[(error.errorType.identifier contains 'ERROR_SELECTING') or (error.errorType.identifier 
+			contains 'ERROR_INSERTING') or (error.errorType.identifier contains 'ERROR_UPDATING') 
+			or (error.errorType.identifier contains 'ERROR_DELETING') ]"> <ee:transform 
+			doc:name="ADT-500" doc:id="5a0f9874-d975-4f96-8e9e-64806570a2df" > <ee:message 
+			> <ee:set-payload ><![CDATA[%dw 2.0 output application/json -&#45;&#45; { 
+			"applicationErrorCode": vars.error.code default "ADT-500", "severity": vars.error.severity 
+			default '2', "errorDescription": if(vars.error.description?) // check for 
+			custom message from error variable vars.error.description else // or from 
+			a validation module error.description default 'Internal Error', "errorCode": 
+			500 } ]]></ee:set-payload> </ee:message> <ee:variables > <ee:set-variable 
+			variableName="httpStatus" ><![CDATA['500']]></ee:set-variable> </ee:variables> 
+			</ee:transform> <flow-ref doc:name="error-handler-exit" doc:id="0ce525dc-fb99-4b1e-92b7-5761f388fd8e" 
+			name="error-handler-exit"/> </on-error-propagate> -->
+
+		<on-error-propagate enableNotifications="true"
+			logException="true" doc:name="On Error Propagate"
+			doc:id="761c6496-20b4-41a2-a582-b258831876f0"
+			type="APIKIT:NOT_IMPLEMENTED">
+			<ee:transform doc:name="AMRN-501"
+				doc:id="fe88247f-7a66-4fd4-b803-94b163c0cd55">
+				<ee:message>
+					<ee:set-payload resource="transformations/error-handler/not-implemented.dwl" />
+				
+</ee:message>
+				<ee:variables>
+					<ee:set-variable variableName="httpStatus"><![CDATA['501']]></ee:set-variable>
+				</ee:variables>
+			</ee:transform>
+			<flow-ref doc:name="error-handler-exit"
+				doc:id="c1aa3f69-b904-4e2d-ab86-3d34faaac6cb"
+				name="error-handler-exit" />
+		</on-error-propagate>
+
+		<on-error-propagate enableNotifications="true"
+			logException="true" doc:name="On Error Propagate"
+			doc:id="83a89007-ae2e-41a6-b0c5-9073fcfbeedb" type="ANY">
+			<ee:transform doc:name="AMRN-500"
+				doc:id="dea9a4fe-7b8a-4304-af9e-9ce93e5a9811">
+				<ee:message>
+					<ee:set-payload resource="transformations/error-handler/internal-error.dwl" />
+				
+</ee:message>
+				<ee:variables>
+					<ee:set-variable variableName="httpStatus"><![CDATA['500']]></ee:set-variable>
+				</ee:variables>
+			</ee:transform>
+			<flow-ref doc:name="error-handler-exit"
+				doc:id="738036ca-1616-42d2-bd46-c6c9e21a19c5"
+				name="error-handler-exit" />
+		</on-error-propagate>
+
+	</error-handler>
+
+	<sub-flow name="error-handler-exit"
+		doc:id="d5b223db-0725-48e1-b4eb-f91719a898a3">
+		<logger level="ERROR" doc:name="Error"
+			doc:id="98a8a3cb-54ac-463c-ac76-b11da1d5b60c"
+			message="#[output application/json --- { 
+				correlationId: vars.correlationId default '0', 
+				errorType: (error.errorType.namespace ++ ':' ++ error.errorType.identifier) default 'UNKNOWN', 
+				error: payload }]"
+			category="${errorhandler.logger.category}" />
+		<logger level="DEBUG" doc:name="errorType Hierarchy"
+			doc:id="d031236b-e5a2-43fe-bc56-3f84cb907413"
+			message="#[output application/json --- { errorType: error.errorType }]"
+			category="${errorhandler.logger.category}" />
+		<flow-ref doc:name="error-handler-callback"
+			doc:id="e2baa35f-e761-4230-ac06-ffb4302efcd8"
+			name="error-handler-callback" />
+	</sub-flow>
+	<!-- <flow name="declaring_APP_error_types_in_private_flow" doc:id="32c0e2a7-4bec-416d-935f-7fcbadfd5f8d" 
+		> <raise-error doc:name="APP:BAD_REQUEST" doc:id="fa8eb9e1-b8b1-4feb-a80f-919f9fec72df" 
+		type="APP:BAD_REQUEST"/> <raise-error doc:name="APP:ERROR_SELECTING" doc:id="80b9c278-523e-4182-97f2-7de05f0d242c" 
+		type="APP:ERROR_SELECTING"/> <raise-error doc:name="APP:ERROR_INSERTING" 
+		doc:id="296f7406-7096-47ac-b24e-a025fd70db6a" type="APP:ERROR_INSERTING"/> 
+		<raise-error doc:name="APP:ERROR_UPDATING" doc:id="2aab7b60-f423-4463-8835-9f93ddea9817" 
+		type="APP:ERROR_UPDATING"/> <raise-error doc:name="APP:ERROR_DELETING" doc:id="df26b90d-fbef-4b17-9006-f4acdd2d909f" 
+		type="APP:ERROR_UPDATING"/> </flow> -->
+</mule>

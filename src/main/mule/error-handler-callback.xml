@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<mule xmlns:ee="http://www.mulesoft.org/schema/mule/ee/core" xmlns:cofww-logger="http://www.mulesoft.org/schema/mule/cofww-logger"
+	xmlns="http://www.mulesoft.org/schema/mule/core"
+	xmlns:doc="http://www.mulesoft.org/schema/mule/documentation" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
+http://www.mulesoft.org/schema/mule/cofww-logger http://www.mulesoft.org/schema/mule/cofww-logger/current/mule-cofww-logger.xsd
+http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd">
+	<flow name="error-handler-callback" doc:id="4d30753f-2d00-4316-aaac-20182d9da504" >
+		<ee:transform doc:name="Transform Message" doc:id="89fdf047-ca4d-422f-b13d-a59577388422" >
+			<ee:message >
+				<ee:set-payload resource="transformations/error-handler/callback.dwl" />
+
+			</ee:message>
+		</ee:transform>
+	</flow>
+</mule>

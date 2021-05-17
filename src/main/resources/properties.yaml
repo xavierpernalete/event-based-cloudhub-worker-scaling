@@ -1,0 +1,29 @@
+http:
+ private:  
+  port: "8091"
+ request:
+  host: "anypoint.mulesoft.com"
+  port: "443"
+  maxConnections: "-1"
+  responsebuffersize: "1024"
+  connection: "30000"
+  timeouts: ""
+  idle: "3000"
+  response: "30000"
+  applications:
+   path: "/cloudhub/api/v2/applications/"
+  alerts:  
+   path: "/cloudhub/api/v2/alerts/" 
+
+# Cloudhub Runtime Manager Alert IDs
+alerts:
+  id: ""
+
+# App names and their configuration for auto scaling; provide comma seperated app names
+worker-scaling:
+ apps: "billaccount-details-p,user-billaccountsummary-p,web-billaccountsummary-e,ecustomer-info-s,support-email-s,finance-paymentagreement-s,account-info-s,finance-collection-s,support-address-s,account-enrollment-s,premise-serviceorder-s"
+
+https:
+ private:
+  port: "8092"
+
