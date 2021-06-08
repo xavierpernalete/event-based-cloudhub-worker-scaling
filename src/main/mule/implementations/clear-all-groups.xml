@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<mule xmlns:ee="http://www.mulesoft.org/schema/mule/ee/core" xmlns:os="http://www.mulesoft.org/schema/mule/os"
+	xmlns="http://www.mulesoft.org/schema/mule/core"
+	xmlns:doc="http://www.mulesoft.org/schema/mule/documentation" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
+http://www.mulesoft.org/schema/mule/os http://www.mulesoft.org/schema/mule/os/current/mule-os.xsd
+http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd">
+	<flow name="clear-all-groups" doc:id="6662c549-28fc-401b-a6c6-b699fa8706d5" >
+		<logger level="INFO" doc:name="Logger" doc:id="65ce092b-a943-4acf-9bb6-134722254860" message="+clear-all-groups"/>
+		<os:clear doc:name="Clear" doc:id="e225641f-59c2-44d8-ac44-127cc6094c2d" objectStore="Object_store"/>
+		<os:retrieve-all-keys doc:name="Retrieve all keys" doc:id="cab3a166-7bd6-4954-bfd3-e564aa028e09" objectStore="Object_store"/>
+		<ee:transform doc:name="Transform Message" doc:id="6c939327-10b7-43e1-a182-087e8539eee5" >
+			<ee:message >
+				<ee:set-payload ><![CDATA[%dw 2.0
+output application/json
+---
+{
+	"groups": payload
+}]]></ee:set-payload>
+			</ee:message>
+		</ee:transform>
+	</flow>
+</mule>

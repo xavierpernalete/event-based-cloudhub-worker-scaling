@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<mule xmlns:os="http://www.mulesoft.org/schema/mule/os" xmlns:ee="http://www.mulesoft.org/schema/mule/ee/core"
+	xmlns="http://www.mulesoft.org/schema/mule/core"
+	xmlns:doc="http://www.mulesoft.org/schema/mule/documentation" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
+http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd
+http://www.mulesoft.org/schema/mule/os http://www.mulesoft.org/schema/mule/os/current/mule-os.xsd">
+	<os:object-store name="Object_store" doc:name="Object store" doc:id="fbf68e17-2fb0-4cd9-89bb-d3bd8855bbf8"/>
+	<flow name="post-group-by-groupid" doc:id="5891b4b8-82af-4680-93d5-ac666988adea" >
+		<logger level="INFO" doc:name="Logger" doc:id="16bd72f1-7126-47e1-b137-dfc15cf1218e" message="+post-group-groupid"/>
+		<ee:transform doc:name="get-group-id" doc:id="8cf77b46-07f2-4d45-8e1d-6d0c4d3ae4ef" >
+			<ee:message >
+				<ee:set-payload ><![CDATA[%dw 2.0
+output application/java
+---
+payload]]></ee:set-payload>
+			</ee:message>
+			<ee:variables >
+				<ee:set-variable variableName="group_id" ><![CDATA[%dw 2.0
+output application/java
+---
+attributes.uriParams.'groupId']]></ee:set-variable>
+				<ee:set-variable variableName="member" ><![CDATA[%dw 2.0
+output application/java
+---
+payload.member]]></ee:set-variable>
+				<ee:set-variable variableName="mule_apps" ><![CDATA[%dw 2.0
+output application/java
+---
+[]]]></ee:set-variable>
+			</ee:variables>
+		</ee:transform>
+		<os:retrieve doc:name="Retrieve" doc:id="8c559852-0893-43ec-ad7f-35d24e07a635" key="#[vars.group_id]" objectStore="Object_store" target="mule_apps">
+			<os:default-value ><![CDATA[#[[]]]]></os:default-value>
+		</os:retrieve>
+		<choice doc:name="Choice" doc:id="35498e39-5241-4e62-a6e7-81bd400da1a2" >
+			<when expression="#[not (vars.mule_apps contains (vars.member))]">
+				<ee:transform doc:name="Transform Message" doc:id="15f2764a-5fe3-4f10-a75e-8e8e0ae0f05c" >
+					<ee:message >
+						<ee:set-payload ><![CDATA[%dw 2.0
+output application/java
+---
+vars.mule_apps + vars.member]]></ee:set-payload>
+					</ee:message>
+				</ee:transform>
+				<set-variable value="#[payload]" doc:name="Set Variable" doc:id="26f49d90-e011-4542-bb64-6f3ac039db00" variableName="mule_apps"/>
+				<os:store doc:name="Store" doc:id="7ccc2d11-a5a0-41e1-9c8b-91e6338a5bfb" key="#[vars.group_id]" objectStore="Object_store" />
+			</when>
+			<otherwise >
+				<logger level="INFO" doc:name="Logger" doc:id="d0b38607-121d-40ff-9b8c-6421abe380a3" message="#[vars.members] already exists"/>
+			</otherwise>
+		</choice>
+		<ee:transform doc:name="Transform Message" doc:id="63181aa5-8b50-4c53-8ae7-431a7a87a0c1" >
+			<ee:message >
+				<ee:set-payload ><![CDATA[%dw 2.0
+output application/json
+---
+{
+	"group_id": vars.group_id,
+	"members": vars.mule_apps,
+	"status": "ok"
+}]]></ee:set-payload>
+			</ee:message>
+		</ee:transform>
+	</flow>
+</mule>

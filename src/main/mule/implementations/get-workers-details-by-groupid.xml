@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<mule xmlns:os="http://www.mulesoft.org/schema/mule/os" xmlns:ee="http://www.mulesoft.org/schema/mule/ee/core"
+	xmlns:http="http://www.mulesoft.org/schema/mule/http"
+	xmlns="http://www.mulesoft.org/schema/mule/core" xmlns:doc="http://www.mulesoft.org/schema/mule/documentation" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
+http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/http/current/mule-http.xsd
+http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd
+http://www.mulesoft.org/schema/mule/os http://www.mulesoft.org/schema/mule/os/current/mule-os.xsd">
+	<flow name="get-workers-details-by-groupid" doc:id="c2b10c56-afe4-4420-b850-e31be26de806" >
+		<logger level="INFO" doc:name="Logger" doc:id="54f270a9-0f9a-4cc7-81cb-629ef4219883" message="+get-workers-details-by-groupid"/>
+		<ee:transform doc:name="get-params" doc:id="59aff18c-1860-4d5b-bcd7-0111e318910a" >
+			<ee:message >
+				<ee:set-payload ><![CDATA[%dw 2.0
+output application/java
+---
+{}]]></ee:set-payload>
+			</ee:message>
+			<ee:variables >
+				<ee:set-variable variableName="group_id" ><![CDATA[%dw 2.0
+output application/java
+---
+attributes.uriParams.'groupId']]></ee:set-variable>
+			</ee:variables>
+		</ee:transform>
+		<os:retrieve doc:name="Retrieve" doc:id="69e50363-f513-4ca9-977b-bae821ed3bcc" target="mule_apps" key="#[vars.group_id]" objectStore="Object_store">
+			<os:default-value ><![CDATA[[]]]></os:default-value>
+		</os:retrieve>
+		<parallel-foreach doc:name="Parallel For Each" doc:id="a2a4a9f1-9a2f-4499-a6ea-666fc8e07a1b" collection="#[vars.mule_apps]" maxConcurrency="4" >
+			<http:request method="GET" doc:name="Request" doc:id="1482aa00-5b80-4eff-bf4f-c3dbd8f7ff74" config-ref="HTTP_Request_configuration-w-token-mgr" path="#[p('http.request.applications.path') ++ payload]" sendCorrelationId="AUTO" >
+				<http:headers ><![CDATA[#[output application/java
+---
+{
+	"X-ANYPNT-ENV-ID" : p('secure::cloudhub.envId'),
+	"X-ANYPNT-ORG-ID" : p('secure::cloudhub.orgId')
+}]]]></http:headers>
+			</http:request>
+			<logger level="INFO" doc:name="Logger" doc:id="58b0b83f-f64d-43a8-9e6a-a0310157c06d" message="domain: #[payload.domain] -- workers: #[payload.workers]" />
+		</parallel-foreach>
+		<ee:transform doc:name="Transform Message" doc:id="7efb8aca-ad44-41a9-a827-a0c6b38366c9" >
+			<ee:message >
+				<ee:set-payload ><![CDATA[%dw 2.0
+output application/json
+---
+{
+	"group_id": vars.group_id,
+	muleApps: payload map (item, index) -> {
+		"domain": payload.payload[index].domain,
+		"workers": payload.payload[index].workers,
+		"status": payload.payload[index].status
+	}
+}]]></ee:set-payload>
+			</ee:message>
+		</ee:transform>
+		<set-payload value="#[payload]" doc:name="Set Payload" doc:id="51f0e701-74e1-4548-9bcf-74403e2335fc" />
+		<logger level="INFO" doc:name="Logger" doc:id="9a669fd5-8f05-4fbc-a6cc-e14d8d138ffd" message="-get-worker-details-w-token-mgr" />
+	</flow>
+</mule>

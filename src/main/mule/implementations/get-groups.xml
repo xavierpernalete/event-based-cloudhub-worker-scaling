@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<mule xmlns:ee="http://www.mulesoft.org/schema/mule/ee/core" xmlns:os="http://www.mulesoft.org/schema/mule/os"
+	xmlns="http://www.mulesoft.org/schema/mule/core"
+	xmlns:doc="http://www.mulesoft.org/schema/mule/documentation" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
+http://www.mulesoft.org/schema/mule/os http://www.mulesoft.org/schema/mule/os/current/mule-os.xsd
+http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd">
+	<flow name="get-groups" doc:id="1078ec93-cc76-466a-a07c-7f7f96310a24" >
+		<logger level="INFO" doc:name="Logger" doc:id="b37dc040-6aae-4ee4-8ca5-c8455116b98e" message="+get-groups"/>
+		<os:retrieve-all-keys doc:name="Retrieve all keys" doc:id="d6c1a178-bab0-4b26-873b-7137966797e4" objectStore="Object_store"/>
+		<ee:transform doc:name="Transform Message" doc:id="f18ab011-3dd9-48a5-a7c1-79493e30d412" >
+			<ee:message >
+				<ee:set-payload ><![CDATA[%dw 2.0
+output application/json
+---
+{
+	"groups": payload
+}]]></ee:set-payload>
+			</ee:message>
+		</ee:transform>
+	</flow>
+</mule>

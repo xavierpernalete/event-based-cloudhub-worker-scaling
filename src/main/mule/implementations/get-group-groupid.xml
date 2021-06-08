@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<mule xmlns:os="http://www.mulesoft.org/schema/mule/os" xmlns:ee="http://www.mulesoft.org/schema/mule/ee/core"
+	xmlns="http://www.mulesoft.org/schema/mule/core"
+	xmlns:doc="http://www.mulesoft.org/schema/mule/documentation" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
+http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd
+http://www.mulesoft.org/schema/mule/os http://www.mulesoft.org/schema/mule/os/current/mule-os.xsd">
+	<flow name="get-group-by-groupid" doc:id="bfbe9869-577e-4f87-8fd4-cc3383e49ee5" >
+		<logger level="INFO" doc:name="Logger" doc:id="9395270d-fa2a-4b95-b07b-f7a0b23bcb09" message="+get-group-groupid"/>
+		<ee:transform doc:name="get-params" doc:id="a6a256c5-975e-41f6-a33f-b97bf3916bb6" >
+			<ee:message >
+				<ee:set-payload ><![CDATA[%dw 2.0
+output application/java
+---
+{}]]></ee:set-payload>
+			</ee:message>
+			<ee:variables >
+				<ee:set-variable variableName="group_id" ><![CDATA[%dw 2.0
+output application/java
+---
+attributes.uriParams.'groupId']]></ee:set-variable>
+			</ee:variables>
+		</ee:transform>
+		<os:retrieve doc:name="Retrieve" doc:id="3c6bf84d-7f0f-426d-8034-813b013003d6" key="#[vars.group_id]" target="mule_apps" objectStore="Object_store">
+			<os:default-value ><![CDATA[[]]]></os:default-value>
+		</os:retrieve>
+		<ee:transform doc:name="Transform Message" doc:id="7a9dc2f0-8c81-4ff4-9e36-2d03ec1a265b" >
+			<ee:message >
+				<ee:set-payload ><![CDATA[%dw 2.0
+output application/json
+---
+{
+	"group_id": vars.group_id,
+	"members": vars.mule_apps,
+	"status": "ok"
+}]]></ee:set-payload>
+			</ee:message>
+		</ee:transform>
+	</flow>
+</mule>
