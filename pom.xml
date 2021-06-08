@@ -55,17 +55,29 @@
             <classifier>mule-plugin</classifier>
         </dependency>
     	<dependency>
-            <groupId>51323221-32f3-4e62-ab9e-709bcaad83e0</groupId>
-            <artifactId>worker-scaling</artifactId>
-            <version>2.0.0</version>
-            <classifier>raml</classifier>
-            <type>zip</type>
-        </dependency>
-    	<dependency>
             <groupId>com.mulesoft.modules</groupId>
             <artifactId>mule-secure-configuration-property-module</artifactId>
             <version>1.2.3</version>
             <classifier>mule-plugin</classifier>
+        </dependency>
+		<dependency>
+		    <groupId>org.mule.modules</groupId>
+		    <artifactId>mule-oauth-module</artifactId>
+		    <version>1.1.16</version>
+		    <classifier>mule-plugin</classifier>
+		</dependency>
+    	<dependency>
+            <groupId>org.mule.connectors</groupId>
+            <artifactId>mule-objectstore-connector</artifactId>
+            <version>1.1.5</version>
+            <classifier>mule-plugin</classifier>
+        </dependency>
+    	<dependency>
+            <groupId>51323221-32f3-4e62-ab9e-709bcaad83e0</groupId>
+            <artifactId>worker-scaling</artifactId>
+            <version>2.0.4</version>
+            <classifier>raml</classifier>
+            <type>zip</type>
         </dependency>
     </dependencies>
 

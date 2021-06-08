@@ -1,25 +1,34 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<mule xmlns:ee="http://www.mulesoft.org/schema/mule/ee/core" xmlns:http="http://www.mulesoft.org/schema/mule/http"
-	xmlns="http://www.mulesoft.org/schema/mule/core"
-	xmlns:doc="http://www.mulesoft.org/schema/mule/documentation" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
+<mule xmlns:oauth="http://www.mulesoft.org/schema/mule/oauth" xmlns:ee="http://www.mulesoft.org/schema/mule/ee/core"
+	xmlns:http="http://www.mulesoft.org/schema/mule/http"
+	xmlns="http://www.mulesoft.org/schema/mule/core" xmlns:doc="http://www.mulesoft.org/schema/mule/documentation" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
 http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/http/current/mule-http.xsd
-http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd">
+http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd
+http://www.mulesoft.org/schema/mule/oauth http://www.mulesoft.org/schema/mule/oauth/current/mule-oauth.xsd">
 	<http:request-config name="HTTP_Request_configuration" doc:name="HTTP Request configuration" doc:id="9f15e4d8-8204-435b-8551-39334e390e79" >
 		<http:request-connection protocol="HTTPS" host="${http.request.host}" port="${http.request.port}">
+		</http:request-connection>
+	</http:request-config>
+	<oauth:token-manager-config name="Mule_Token_manager_config" doc:name="Token manager config" doc:id="ae8420a8-c5de-4da5-b9a0-0a86032b2f6b" />
+	<http:request-config name="HTTP_Request_configuration-w-token-mgr" doc:name="HTTP Request configuration" doc:id="8b037d47-e8c5-4ea8-be20-f6c24f07bb2a" >
+		<http:request-connection protocol="HTTPS" host="${http.request.host}" port="${http.request.port}">
 			<http:authentication >
-				<http:basic-authentication username="${secure::cloudhub.username}" password="${secure::cloudhub.password}" />
+				<oauth:client-credentials-grant-type clientId="${secure::connectedApp.workerScaler.client_id}" clientSecret="${secure::connectedApp.workerScaler.client_secret}" tokenUrl="${http.request.token.url}" tokenManager="Mule_Token_manager_config" />
 			</http:authentication>
 		</http:request-connection>
 	</http:request-config>
 	<flow name="get-workers-details" doc:id="f1d3abd0-f5f1-4a81-8ba2-92dbbab005ba" >
 		<logger level="INFO" doc:name="Logger" doc:id="7daf1cac-e8a5-42ce-a6b7-5c4956be574c" message="+get-worker-details"/>
+		<flow-ref doc:name="get-access-token" doc:id="0568c162-590b-4a90-813d-31c6387bbbd7" name="get-access-token"/>
 		<parallel-foreach doc:name="Parallel For Each" doc:id="b9404054-735a-4236-980e-bb46b106a949" collection="#[p('worker-scaling.apps') splitBy(/,/)]" maxConcurrency="4">
 			<http:request method="GET" doc:name="Request" doc:id="2652fea0-a80b-4e8a-a183-fb68103823da" config-ref="HTTP_Request_configuration" path="#[p('http.request.applications.path') ++ payload]">
 				<http:headers ><![CDATA[#[output application/java
 ---
 {
-	"X-ANYPNT-ENV-ID" : p('secure::cloudhub.envId')
+	"X-ANYPNT-ENV-ID" : p('secure::cloudhub.envId'),
+	"Authorization" : "Bearer " ++ vars.access_token,
+	"X-ANYPNT-ORG-ID" : p('secure::cloudhub.orgId')
 }]]]></http:headers>
 			</http:request>
 			<logger level="INFO" doc:name="Logger" doc:id="0b2db9ed-ca2d-4476-a429-78bd46c4807d" message="domain: #[payload.domain] -- workers: #[payload.workers]"/>
@@ -41,8 +50,39 @@ output application/json
 		<set-payload value="#[payload]" doc:name="Set Payload" doc:id="169f6676-efcd-4d1f-b660-c270d79d7000" />
 		<logger level="INFO" doc:name="Logger" doc:id="2549e67c-b3c9-4906-9f87-d835de03c26f" message="-get-worker-details"/>
 	</flow>
+	<flow name="get-workers-details-w-token-mgr" doc:id="60e29c79-9d08-435b-bfbe-e936d71e4c2d" >
+		<logger level="INFO" doc:name="Logger" doc:id="07eafff0-2b6a-49e9-9760-3392c039f87e" message="+get-worker-details-w-token-mgr" />
+		<parallel-foreach doc:name="Parallel For Each" doc:id="f7813692-ef8d-4a6f-8d2b-963c1773f8da" collection="#[p('worker-scaling.apps') splitBy(/,/)]" maxConcurrency="4" >
+			<http:request method="GET" doc:name="Request" doc:id="8402d151-201f-4b2a-a94f-d51769f5d0fe" config-ref="HTTP_Request_configuration-w-token-mgr" path="#[p('http.request.applications.path') ++ payload]" sendCorrelationId="AUTO">
+				<http:headers ><![CDATA[#[output application/java
+---
+{
+	"X-ANYPNT-ENV-ID" : p('secure::cloudhub.envId'),
+	"X-ANYPNT-ORG-ID" : p('secure::cloudhub.orgId')
+}]]]></http:headers>
+			</http:request>
+			<logger level="INFO" doc:name="Logger" doc:id="b29ce5f9-6926-4b47-8dc4-0cead55aedf1" message="domain: #[payload.domain] -- workers: #[payload.workers]" />
+		</parallel-foreach>
+		<ee:transform doc:name="Transform Message" doc:id="2d626622-4c53-4ea9-bbac-4ad33936a9e2" >
+			<ee:message >
+				<ee:set-payload ><![CDATA[%dw 2.0
+output application/json
+---
+{
+	muleApps: payload map (item, index) -> {
+		"domain": payload.payload[index].domain,
+		"workers": payload.payload[index].workers,
+		"status": payload.payload[index].status
+	}
+}]]></ee:set-payload>
+			</ee:message>
+		</ee:transform>
+		<set-payload value="#[payload]" doc:name="Set Payload" doc:id="3dbc4381-ee15-4ea6-8951-2ba564a79ae3" />
+		<logger level="INFO" doc:name="Logger" doc:id="0bb28485-0964-404e-bda6-4e5fb30c7e29" message="-get-worker-details-w-token-mgr" />
+	</flow>
 	<flow name="workers-horizontal-scale" doc:id="666d92fb-e48a-45e5-9a66-fa4fd45ab1b8" >
 		<logger level="INFO" doc:name="" doc:id="08cdff7b-cff9-4991-8186-8282d9160aa3" message="+workers-horizontal-scale"/>
+		<flow-ref doc:name="get-access-token" doc:id="44fbeb3a-2d21-4998-9945-66457b6e7ff8" name="get-access-token"/>
 		<ee:transform doc:name="Extract domain details" doc:id="86d1e7c2-532c-46ac-9aa2-5bd77063f7d3" >
 			<ee:message >
 				<ee:set-payload ><![CDATA[%dw 2.0
@@ -81,6 +121,7 @@ payload.domain]]></ee:set-variable>
 ---
 {
 	"X-ANYPNT-ENV-ID" : p('secure::cloudhub.envId'),
+	"Authorization" : "Bearer " ++ vars.access_token,
 	"Content-Type" : "application/json"
 }]]]></http:headers>
 			</http:request>
@@ -101,6 +142,66 @@ output application/json
 		</ee:transform>
 		<set-payload value="#[payload]" doc:name="Set Payload" doc:id="812896ff-2e56-41fa-a637-48795f710532" />
 		<logger level="INFO" doc:name="Logger" doc:id="3cbeff9c-6c08-4088-89fe-c7310e4000ad" message="-workers-horizontal-scale"/>
+	</flow>
+	<flow name="workers-horizontal-scale-w-token-mgr" doc:id="a43af56d-068f-483a-bcad-4c69b7d8e37d" >
+		<logger level="INFO" doc:name="Logger" doc:id="f95e8c49-ab7f-401d-8179-b955924fa529" message="+workers-horizontal-scale-w-token-mgr" />
+		<ee:transform doc:name="Extract domain details" doc:id="3dc29e8e-f371-4764-a444-e68217aee22f" >
+			<ee:message >
+				<ee:set-payload ><![CDATA[%dw 2.0
+output application/java
+---
+payload.muleApps map (item, index) -> {
+    "domain": item.domain,
+    "workers": item.workers.amount
+}
+]]></ee:set-payload>
+			</ee:message>
+			<ee:variables />
+		</ee:transform>
+		<parallel-foreach doc:name="Parallel For Each" doc:id="5ff10c27-4e21-4c5e-b3ef-4eea7cc8f7a1" collection="#[payload]" maxConcurrency="4" >
+			<ee:transform doc:name="Create request" doc:id="777e6c01-9613-4567-ae4b-7e6a406bbc2d" >
+				<ee:message >
+					<ee:set-payload ><![CDATA[%dw 2.0
+output application/json
+---
+{
+	"workers":{
+		"amount": payload.workers
+	}
+}]]></ee:set-payload>
+				</ee:message>
+				<ee:variables >
+					<ee:set-variable variableName="domain" ><![CDATA[%dw 2.0
+output application/java
+---
+payload.domain]]></ee:set-variable>
+				</ee:variables>
+			</ee:transform>
+			<http:request method="PUT" doc:name="Request" doc:id="dc47a381-e73e-47ee-8226-8e126baa2935" config-ref="HTTP_Request_configuration-w-token-mgr" path="#[p('http.request.applications.path') ++ vars.domain]" >
+				<http:headers ><![CDATA[#[output application/java
+---
+{
+	"X-ANYPNT-ENV-ID" : p('secure::cloudhub.envId'),
+	"Content-Type" : "application/json"
+}]]]></http:headers>
+			</http:request>
+		</parallel-foreach>
+		<ee:transform doc:name="Filter msg" doc:id="2779541a-3543-4dd0-9f2c-42f49b9b755e">
+			<ee:message>
+				<ee:set-payload><![CDATA[%dw 2.0
+output application/json
+---
+{
+	muleApps: payload map (item, index) -> {
+		"domain": payload.payload[index].domain,
+		"workers": payload.payload[index].workers,
+		"status": payload.payload[index].status
+	}
+}]]></ee:set-payload>
+			</ee:message>
+		</ee:transform>
+		<set-payload value="#[payload]" doc:name="Set Payload" doc:id="c4bb708e-19b8-41e0-a5f3-e97bc3e7ee90" />
+		<logger level="INFO" doc:name="Logger" doc:id="b957ee88-572f-407e-a4af-7bbf7693fde3" message="-workers-horizontal-scale-w-token-mgr" />
 	</flow>
 	<flow name="workers-horizontal-scale-increaseby" doc:id="d07a9c28-632a-4b89-b92b-02923817fcbd" >
 		<logger level="INFO" doc:name="Logger" doc:id="57c3f5ec-e855-424e-a3e3-79073b4c2a52" message="+workers-horizontal-scale-increaseby"/>
@@ -172,7 +273,7 @@ output application/java
 payload.domain]]></ee:set-variable>
 				</ee:variables>
 			</ee:transform>
-			<http:request method="PUT" doc:name="Request" doc:id="7ff35ba3-ad51-4521-ba54-8097419e6516" config-ref="HTTP_Request_configuration" path="#[p('http.request.applications.path') ++ vars.domain]" >
+			<http:request method="PUT" doc:name="Request" doc:id="7ff35ba3-ad51-4521-ba54-8097419e6516" config-ref="HTTP_Request_configuration-w-token-mgr" path="#[p('http.request.applications.path') ++ vars.domain]" >
 				<http:headers ><![CDATA[#[output application/java
 ---
 {
@@ -268,7 +369,7 @@ output application/java
 payload.domain]]></ee:set-variable>
 				</ee:variables>
 			</ee:transform>
-			<http:request method="PUT" doc:name="Request" doc:id="1e000aae-d317-4441-bb25-b2676b299fef" config-ref="HTTP_Request_configuration" path="#[p('http.request.applications.path') ++ vars.domain]" >
+			<http:request method="PUT" doc:name="Request" doc:id="1e000aae-d317-4441-bb25-b2676b299fef" config-ref="HTTP_Request_configuration-w-token-mgr" path="#[p('http.request.applications.path') ++ vars.domain]" >
 				<http:headers ><![CDATA[#[output application/java
 ---
 {
@@ -309,11 +410,12 @@ payload.muleApps map (item, index) -> {
 		</ee:transform>
 		<parallel-foreach doc:name="Parallel For Each" doc:id="f86449ac-074f-4693-9f10-c38f209cce64" collection="#[payload]" maxConcurrency="4">
 			<set-variable value="#[payload.domain]" doc:name="Set Variable" doc:id="ba7ae27a-a61e-420e-8d3e-6322d357a561" variableName="domain"/>
-			<http:request method="GET" doc:name="Query workers" doc:id="1b0658ee-de63-4ef0-864c-a485b736cf68" config-ref="HTTP_Request_configuration" path="#[p('http.request.applications.path') ++ vars.domain]" >
+			<http:request method="GET" doc:name="Query workers" doc:id="1b0658ee-de63-4ef0-864c-a485b736cf68" config-ref="HTTP_Request_configuration-w-token-mgr" path="#[p('http.request.applications.path') ++ vars.domain]" >
 				<http:headers ><![CDATA[#[output application/java
 ---
 {
-	"X-ANYPNT-ENV-ID" : p('secure::cloudhub.envId')
+	"X-ANYPNT-ENV-ID" : p('secure::cloudhub.envId'),
+	"X-ANYPNT-ORG-ID" : p('secure::cloudhub.orgId')
 }]]]></http:headers>
 			</http:request>
 		</parallel-foreach>
@@ -331,5 +433,42 @@ output application/json
 }]]></ee:set-payload>
 			</ee:message>
 		</ee:transform>
+	</sub-flow>
+	<sub-flow name="get-access-token" doc:id="da9dafb1-63a4-42e4-81eb-beff52d698fb" >
+		<set-variable value="#[payload]" doc:name="Store OG payload" doc:id="8b1c47b9-c0ef-4854-841b-efd8ac293af7" variableName="og_payload"/>
+		<ee:transform doc:name="Prepare credentials" doc:id="82a5780a-1e2a-4a61-97b6-2223f5141b3e" >
+			<ee:message >
+				<ee:set-payload ><![CDATA[%dw 2.0
+output application/json
+---
+{
+	"client_id": p('secure::connectedApp.workerScaler.client_id'),
+	"client_secret": p('secure::connectedApp.workerScaler.client_secret'),
+	"grant_type": "client_credentials"
+}]]></ee:set-payload>
+			</ee:message>
+		</ee:transform>
+		<http:request method="POST" doc:name="Request" doc:id="96bb1d8b-1153-4afc-aaac-d4e64604df96" config-ref="HTTP_Request_configuration" path="${http.request.token.path}">
+			<http:headers ><![CDATA[#[output application/java
+---
+{
+	"Content-Type" : "application/json"
+}]]]></http:headers>
+		</http:request>
+		<ee:transform doc:name="store token" doc:id="c724521d-5095-418f-adf3-9c64ab9649ee" >
+			<ee:message >
+				<ee:set-payload ><![CDATA[%dw 2.0
+output application/java
+---
+payload]]></ee:set-payload>
+			</ee:message>
+			<ee:variables >
+				<ee:set-variable variableName="access_token" ><![CDATA[%dw 2.0
+output application/java
+---
+payload.access_token]]></ee:set-variable>
+			</ee:variables>
+		</ee:transform>
+		<set-payload value="#[vars.og_payload]" doc:name="Set Payload" doc:id="d495b413-09e4-4305-aa97-18a48c675a03" />
 	</sub-flow>
 </mule>

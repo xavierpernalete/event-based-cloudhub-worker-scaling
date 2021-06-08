@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<mule xmlns="http://www.mulesoft.org/schema/mule/core" xmlns:apikit="http://www.mulesoft.org/schema/mule/mule-apikit" xmlns:doc="http://www.mulesoft.org/schema/mule/documentation" xmlns:http="http://www.mulesoft.org/schema/mule/http" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/http/current/mule-http.xsd http://www.mulesoft.org/schema/mule/mule-apikit http://www.mulesoft.org/schema/mule/mule-apikit/current/mule-apikit.xsd ">
+<mule xmlns="http://www.mulesoft.org/schema/mule/core" xmlns:apikit="http://www.mulesoft.org/schema/mule/mule-apikit" xmlns:doc="http://www.mulesoft.org/schema/mule/documentation" xmlns:ee="http://www.mulesoft.org/schema/mule/ee/core" xmlns:http="http://www.mulesoft.org/schema/mule/http" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/http/current/mule-http.xsd http://www.mulesoft.org/schema/mule/mule-apikit http://www.mulesoft.org/schema/mule/mule-apikit/current/mule-apikit.xsd  http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd">
     <http:listener-config name="worker-scaling-httpListenerConfig">
         <http:listener-connection host="0.0.0.0" port="8081" />
     </http:listener-config>
-    <apikit:config name="worker-scaling-config" api="resource::51323221-32f3-4e62-ab9e-709bcaad83e0:worker-scaling:2.0.0:raml:zip:worker-scaling.raml" outboundHeadersMapName="outboundHeaders" httpStatusVarName="httpStatus" />
+    <apikit:config name="worker-scaling-config" api="resource::51323221-32f3-4e62-ab9e-709bcaad83e0:worker-scaling:2.0.4:raml:zip:worker-scaling.raml" outboundHeadersMapName="outboundHeaders" httpStatusVarName="httpStatus" />
     <flow name="worker-scaling-main">
         <http:listener config-ref="worker-scaling-httpListenerConfig" path="/api/*">
             <http:response statusCode="#[vars.httpStatus default 200]">
@@ -31,15 +31,36 @@
         <error-handler ref="error-handler" />
     </flow>
     <flow name="get:\workers\details:worker-scaling-config">
-        <flow-ref doc:name="Flow Reference" doc:id="2c8d9f76-3977-4163-8113-ec5c7a944c97" name="get-workers-details" />
+        <flow-ref doc:name="Flow Reference" doc:id="2c8d9f76-3977-4163-8113-ec5c7a944c97" name="get-workers-details-w-token-mgr" />
     </flow>
     <flow name="post:\workers\horizontalScale:application\json:worker-scaling-config">
-        <flow-ref doc:name="Flow Reference" doc:id="0c21b271-72ff-4472-a2b3-5780957f8af2" name="workers-horizontal-scale" />
+        <flow-ref doc:name="Flow Reference" doc:id="0c21b271-72ff-4472-a2b3-5780957f8af2" name="workers-horizontal-scale-w-token-mgr" />
     </flow>
     <flow name="put:\workers\horizontalScale\decreaseBy:application\json:worker-scaling-config">
-		<flow-ref doc:name="Flow Reference" doc:id="2a2fd37a-bd9c-4e35-a93e-75ac31063b01" name="workers-horizontal-scale-decreaseby"/>
+        <flow-ref doc:name="Flow Reference" doc:id="2a2fd37a-bd9c-4e35-a93e-75ac31063b01" name="workers-horizontal-scale-decreaseby" />
     </flow>
     <flow name="put:\workers\horizontalScale\increaseBy:application\json:worker-scaling-config">
-		<flow-ref doc:name="Flow Reference" doc:id="ec8dd5d3-26fa-4433-8ece-2c18f6f75a60" name="workers-horizontal-scale-increaseby"/>
+        <flow-ref doc:name="Flow Reference" doc:id="ec8dd5d3-26fa-4433-8ece-2c18f6f75a60" name="workers-horizontal-scale-increaseby" />
+    </flow>
+    <flow name="put:\groups\(groupId):application\json:worker-scaling-config">
+        <flow-ref doc:name="put-group-groupid" doc:id="f9a68052-0f33-4798-a9d4-4ca0674ad132" name="put-group-groupid" />
+    </flow>
+    <flow name="get:\groups:worker-scaling-config">
+        <flow-ref doc:name="get-groups" doc:id="b603e985-675d-4387-9102-d6178e992e75" name="get-groups" />
+    </flow>
+    <flow name="get:\groups\(groupId):worker-scaling-config">
+        <flow-ref doc:name="get-group-by-groupid" doc:id="eb982631-cdb6-4e2e-b27c-7deee577da88" name="get-group-by-groupid" />
+    </flow>
+    <flow name="get:\workers\(groupId):worker-scaling-config">
+        <flow-ref doc:name="get-workers-details-by-groupid" doc:id="c773ab62-c6ee-4135-9864-1f8d47a46432" name="get-workers-details-by-groupid" />
+    </flow>
+    <flow name="post:\groups\(groupId):application\json:worker-scaling-config">
+        <flow-ref doc:name="post-group-by-groupid" doc:id="e48e1a89-28a2-400e-aa46-92337a28a884" name="post-group-by-groupid" />
+    </flow>
+    <flow name="post:\groups\clear:worker-scaling-config">
+        <flow-ref doc:name="clear-all-groups" doc:id="797f0dce-fffa-462f-a353-59a8295ebf96" name="clear-all-groups" />
+    </flow>
+    <flow name="delete:\groups:worker-scaling-config">
+		<flow-ref doc:name="clear-all-groups" doc:id="90778c12-c964-459b-811f-f8f067bb5914" name="clear-all-groups" />
     </flow>
 </mule>
