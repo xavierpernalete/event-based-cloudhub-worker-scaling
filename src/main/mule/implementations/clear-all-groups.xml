@@ -19,5 +19,6 @@ output application/json
 }]]></ee:set-payload>
 			</ee:message>
 		</ee:transform>
+		<logger level="INFO" doc:name="Logger" doc:id="976eeeba-85b1-48c5-a05d-3453f9918231" message="-clear-all-groups" />
 	</flow>
 </mule>

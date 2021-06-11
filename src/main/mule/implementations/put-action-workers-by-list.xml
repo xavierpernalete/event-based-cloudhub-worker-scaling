@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<mule xmlns="http://www.mulesoft.org/schema/mule/core" xmlns:doc="http://www.mulesoft.org/schema/mule/documentation"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd">
+	<flow name="put-action-workers-by-list" doc:id="7e564548-bfa1-4b7c-bf15-13568248b38d" >
+		<logger level="INFO" doc:name="Logger" doc:id="ff9ed5e0-3dd8-4359-800c-1856acec29bc" message="+put-action-workers-by-list"/>
+		<logger level="INFO" doc:name="Logger" doc:id="e2d43fef-c8e8-4268-8fae-a413821ebbb4" message="-put-action-workers-by-list" />
+	</flow>
+</mule>

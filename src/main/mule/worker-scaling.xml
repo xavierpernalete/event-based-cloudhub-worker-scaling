@@ -3,7 +3,7 @@
     <http:listener-config name="worker-scaling-httpListenerConfig">
         <http:listener-connection host="0.0.0.0" port="8081" />
     </http:listener-config>
-    <apikit:config name="worker-scaling-config" api="resource::51323221-32f3-4e62-ab9e-709bcaad83e0:worker-scaling:2.0.4:raml:zip:worker-scaling.raml" outboundHeadersMapName="outboundHeaders" httpStatusVarName="httpStatus" />
+    <apikit:config name="worker-scaling-config" api="resource::51323221-32f3-4e62-ab9e-709bcaad83e0:worker-scaling:2.0.7:raml:zip:worker-scaling.raml" outboundHeadersMapName="outboundHeaders" httpStatusVarName="httpStatus" />
     <flow name="worker-scaling-main">
         <http:listener config-ref="worker-scaling-httpListenerConfig" path="/api/*">
             <http:response statusCode="#[vars.httpStatus default 200]">
@@ -29,9 +29,6 @@
         </http:listener>
         <apikit:console config-ref="worker-scaling-config" />
         <error-handler ref="error-handler" />
-    </flow>
-    <flow name="get:\workers\details:worker-scaling-config">
-        <flow-ref doc:name="Flow Reference" doc:id="2c8d9f76-3977-4163-8113-ec5c7a944c97" name="get-workers-details-w-token-mgr" />
     </flow>
     <flow name="post:\workers\horizontalScale:application\json:worker-scaling-config">
         <flow-ref doc:name="Flow Reference" doc:id="0c21b271-72ff-4472-a2b3-5780957f8af2" name="workers-horizontal-scale-w-token-mgr" />
@@ -61,6 +58,35 @@
         <flow-ref doc:name="clear-all-groups" doc:id="797f0dce-fffa-462f-a353-59a8295ebf96" name="clear-all-groups" />
     </flow>
     <flow name="delete:\groups:worker-scaling-config">
-		<flow-ref doc:name="clear-all-groups" doc:id="90778c12-c964-459b-811f-f8f067bb5914" name="clear-all-groups" />
+        <flow-ref doc:name="clear-all-groups" doc:id="90778c12-c964-459b-811f-f8f067bb5914" name="clear-all-groups" />
+    </flow>
+    <flow name="put:\workers:application\json:worker-scaling-config">
+        <ee:transform xsi:schemaLocation="http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd">
+            <ee:message>
+                <ee:set-payload><![CDATA[%dw 2.0
+output application/json
+---
+{
+  muleApps: [
+    {
+      domain: "support-email-s",
+      status: "STOPPED"
+    }, 
+    {
+      domain: "support-address-s",
+      status: "STOPPED"
+    }, 
+    {
+      domain: "premise-serviceorder-s",
+      status: "STOPPED"
+    }
+  ]
+}]]></ee:set-payload>
+            </ee:message>
+        </ee:transform>
+        <flow-ref doc:name="put-action-workers-by-list" doc:id="79091bf1-6934-4a1c-b665-6b23ea188c24" name="put-action-workers-by-list" />
+    </flow>
+    <flow name="put:\workers\(groupId):application\json:worker-scaling-config">
+		<flow-ref doc:name="put-action-workers-by-group" doc:id="8c71e95f-6b8a-4d4a-be6d-5f0673a5fe0d" name="put-action-workers-by-group"/>
     </flow>
 </mule>

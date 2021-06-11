@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<mule xmlns:ee="http://www.mulesoft.org/schema/mule/ee/core" xmlns:http="http://www.mulesoft.org/schema/mule/http"
+	xmlns="http://www.mulesoft.org/schema/mule/core"
+	xmlns:doc="http://www.mulesoft.org/schema/mule/documentation" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
+http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/http/current/mule-http.xsd
+http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd">
+	<flow name="get-workers-details-w-token-mgr" doc:id="cfe6f2cc-0cd4-447f-a3b8-9aac9cb125a7" >
+		<logger level="INFO" doc:name="Logger" doc:id="8e85ad03-f747-42a7-bc71-0f990bb87fa7" message="+get-worker-details-w-token-mgr" />
+		<parallel-foreach doc:name="Parallel For Each" doc:id="52ff4a8d-9379-4d83-9222-c82495d77183" collection="#[vars.members]" maxConcurrency="4" >
+			<http:request method="GET" doc:name="Request" doc:id="a1d85bee-721f-412d-9da9-0fdecbeffb96" config-ref="HTTP_Request_configuration-w-token-mgr" path="#[p('http.request.applications.path') ++ payload]" sendCorrelationId="AUTO" >
+				<http:headers ><![CDATA[#[output application/java
+---
+{
+	"X-ANYPNT-ENV-ID" : p('secure::cloudhub.envId'),
+	"X-ANYPNT-ORG-ID" : p('secure::cloudhub.orgId')
+}]]]></http:headers>
+			</http:request>
+			<logger level="INFO" doc:name="Logger" doc:id="a5930ead-8b18-4784-8764-2c7339b68ab9" message="domain: #[payload.domain] -- workers: #[payload.workers]" />
+		</parallel-foreach>
+		<ee:transform doc:name="Transform Message" doc:id="133cca3b-b3dc-4321-9d4b-ba04c25dac97" >
+			<ee:message >
+				<ee:set-payload ><![CDATA[%dw 2.0
+output application/json
+---
+{
+	muleApps: payload map (item, index) -> {
+		"domain": payload.payload[index].domain,
+		"workers": payload.payload[index].workers,
+		"status": payload.payload[index].status
+	}
+}]]></ee:set-payload>
+			</ee:message>
+		</ee:transform>
+		<set-payload value="#[payload]" doc:name="Set Payload" doc:id="86fac55f-a16a-4c66-a991-a4d7d9714109" />
+		<logger level="INFO" doc:name="Logger" doc:id="fb7044ae-d434-4383-9ae0-cd28192eb9cf" message="-get-worker-details-w-token-mgr" />
+	</flow>
+</mule>

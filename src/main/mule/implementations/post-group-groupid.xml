@@ -62,5 +62,6 @@ output application/json
 }]]></ee:set-payload>
 			</ee:message>
 		</ee:transform>
+		<logger level="INFO" doc:name="Logger" doc:id="8cb8e025-cea6-4caf-af8e-1102bd911998" message="-post-group-groupid" />
 	</flow>
 </mule>

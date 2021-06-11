@@ -1,0 +1,104 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<mule xmlns:http="http://www.mulesoft.org/schema/mule/http" xmlns:ee="http://www.mulesoft.org/schema/mule/ee/core"
+	xmlns="http://www.mulesoft.org/schema/mule/core"
+	xmlns:doc="http://www.mulesoft.org/schema/mule/documentation" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
+http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd
+http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/http/current/mule-http.xsd">
+	<flow name="workers-horizontal-scale-increaseby" doc:id="57e6552b-be33-4598-98f4-b28b756da74f" >
+		<logger level="INFO" doc:name="Logger" doc:id="33ec03ff-a689-4564-be41-58bc4128a4b2" message="+workers-horizontal-scale-increaseby" />
+		<ee:transform doc:name="Retain increments" doc:id="8b7352fc-d95d-4a51-abd1-d42a5e366227" >
+			<ee:message >
+				<ee:set-payload ><![CDATA[%dw 2.0
+output application/java
+---
+payload]]></ee:set-payload>
+			</ee:message>
+			<ee:variables >
+				<ee:set-variable variableName="increments" ><![CDATA[%dw 2.0
+output application/java
+---
+payload.muleApps map {
+    ($.domain) : $.workers.amount
+}]]></ee:set-variable>
+			</ee:variables>
+		</ee:transform>
+		<flow-ref doc:name="extract-current-worker-details" doc:id="5170720d-375d-48c2-b787-d8c69bb0eaca" name="extract-details-then-enquire-workers"/>
+		<parallel-foreach doc:name="Parallel For Each" doc:id="dd17a172-6548-4d91-ba9c-b7928268a73e" collection="#[payload.muleApps]" maxConcurrency="4" >
+			<ee:transform doc:name="Get increment for domain" doc:id="417f4ab9-c503-40a7-903c-0d502ebf3dbd" >
+				<ee:message >
+					<ee:set-payload ><![CDATA[%dw 2.0
+output application/java
+---
+payload]]></ee:set-payload>
+				</ee:message>
+				<ee:variables >
+					<ee:set-variable variableName="worker_incr" ><![CDATA[%dw 2.0
+output application/java
+---
+vars.increments[payload.domain]]]></ee:set-variable>
+				</ee:variables>
+			</ee:transform>
+			<ee:transform doc:name="get domain and worker numbers" doc:id="1f8f64e9-7cbc-4dc6-911c-98eebacca23e" >
+				<ee:message >
+					<ee:set-payload ><![CDATA[%dw 2.0
+output application/java
+---
+payload]]></ee:set-payload>
+				</ee:message>
+				<ee:variables >
+					<ee:set-variable variableName="domain" ><![CDATA[%dw 2.0
+output application/java
+---
+payload.domain]]></ee:set-variable>
+					<ee:set-variable variableName="workers" ><![CDATA[%dw 2.0
+output application/java
+---
+(payload.workers.amount + vars.worker_incr[0])]]></ee:set-variable>
+				</ee:variables>
+			</ee:transform>
+			<ee:transform doc:name="Create request" doc:id="16b62b0b-1c5e-4539-8aa3-5b6dd4a066f8" >
+				<ee:message >
+					<ee:set-payload ><![CDATA[%dw 2.0
+output application/json
+---
+{
+	"workers":{
+		"amount": vars.workers[0] as Number
+	}
+}]]></ee:set-payload>
+				</ee:message>
+				<ee:variables >
+					<ee:set-variable variableName="domain" ><![CDATA[%dw 2.0
+output application/java
+---
+payload.domain]]></ee:set-variable>
+				</ee:variables>
+			</ee:transform>
+			<http:request method="PUT" doc:name="Request" doc:id="70a42364-1812-48ab-9382-b36237b5cb57" config-ref="HTTP_Request_configuration-w-token-mgr" path="#[p('http.request.applications.path') ++ vars.domain]" >
+				<http:headers ><![CDATA[#[output application/java
+---
+{
+	"X-ANYPNT-ENV-ID" : p('secure::cloudhub.envId'),
+	"Content-Type" : "application/json"
+}]]]></http:headers>
+			</http:request>
+		</parallel-foreach>
+		<ee:transform doc:name="Filter message" doc:id="c0e97928-3e88-4226-a1f0-ff5c48b7ca32" >
+			<ee:message >
+				<ee:set-payload ><![CDATA[%dw 2.0
+output application/json
+---
+{
+	muleApps: payload map (item, index) -> {
+		"domain": payload.payload[index].domain,
+		"workers": payload.payload[index].workers,
+		"status": payload.payload[index].status
+	}
+}]]></ee:set-payload>
+			</ee:message>
+		</ee:transform>
+		<set-payload value="#[payload]" doc:name="Set Payload" doc:id="9d84334a-8b27-4c3d-ba14-52ab3223d192" />
+		<logger level="INFO" doc:name="Logger" doc:id="274e6757-30ff-43b5-9f51-da21ae1bd521" message="-workers-horizontal-scale-increaseby" />
+	</flow>
+</mule>

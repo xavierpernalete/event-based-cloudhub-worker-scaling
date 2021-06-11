@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<mule xmlns:http="http://www.mulesoft.org/schema/mule/http" xmlns:ee="http://www.mulesoft.org/schema/mule/ee/core"
+	xmlns="http://www.mulesoft.org/schema/mule/core"
+	xmlns:doc="http://www.mulesoft.org/schema/mule/documentation" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
+http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd
+http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/http/current/mule-http.xsd">
+	<flow name="put-action-workers-by-group" doc:id="d6540c15-c7d4-4039-96ae-fa9123a39f29" >
+		<logger level="INFO" doc:name="Logger" doc:id="07d3cde8-9d69-4caa-9635-1758fcaed7d3" message="+put-action-workers-by-group"/>
+		<ee:transform doc:name="get-action" doc:id="e0ee2b7d-f141-4918-8657-2e23c64f001b" >
+			<ee:message >
+				<ee:set-payload ><![CDATA[%dw 2.0
+output application/java
+---
+payload]]></ee:set-payload>
+			</ee:message>
+			<ee:variables >
+				<ee:set-variable variableName="action" ><![CDATA[%dw 2.0
+output application/java
+---
+payload.action]]></ee:set-variable>
+			</ee:variables>
+		</ee:transform>
+		<flow-ref doc:name="get-group-by-groupid" doc:id="d561792a-e815-486e-9c93-11e0f38e8ddf" name="get-group-by-groupid"/>
+		<ee:transform doc:name="get-members" doc:id="17b96378-2efa-4079-abf6-2ccfb863d8f1" >
+			<ee:message >
+				<ee:set-payload ><![CDATA[%dw 2.0
+output application/json
+---
+{
+	"action": vars.action,
+	"domains": payload.members
+}]]></ee:set-payload>
+			</ee:message>
+			<ee:variables >
+				<ee:set-variable variableName="members" ><![CDATA[%dw 2.0
+output application/java
+---
+payload.members]]></ee:set-variable>
+			</ee:variables>
+		</ee:transform>
+		<http:request method="PUT" doc:name="Request" doc:id="4796e6ed-326e-4a34-a6d6-c382e7da7dd7" config-ref="HTTP_Request_configuration-w-token-mgr" path="#[p('http.request.applications.path')]">
+				<http:headers><![CDATA[#[output application/java
+---
+{
+	"X-ANYPNT-ENV-ID" : p('secure::cloudhub.envId'),
+	"Content-Type" : "application/json"
+}]]]></http:headers>
+			</http:request>
+		<flow-ref doc:name="get-workers-details-w-token-mgr" doc:id="365e9ee9-627c-4917-a576-b5b139ca9aa7" name="get-workers-details-w-token-mgr"/>
+		<logger level="INFO" doc:name="Logger" doc:id="c2e1400f-50e7-406e-9b7b-7307a711f74f" message="-put-action-workers-by-group"/>
+	</flow>
+</mule>
