@@ -1,10 +1,34 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<mule xmlns="http://www.mulesoft.org/schema/mule/core" xmlns:doc="http://www.mulesoft.org/schema/mule/documentation"
-	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-	xsi:schemaLocation="http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd">
+<mule xmlns:http="http://www.mulesoft.org/schema/mule/http" xmlns:ee="http://www.mulesoft.org/schema/mule/ee/core"
+	xmlns="http://www.mulesoft.org/schema/mule/core"
+	xmlns:doc="http://www.mulesoft.org/schema/mule/documentation" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
+http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd
+http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/http/current/mule-http.xsd">
 	<flow name="put-action-workers-by-list" doc:id="7e564548-bfa1-4b7c-bf15-13568248b38d" >
 		<logger level="INFO" doc:name="Logger" doc:id="ff9ed5e0-3dd8-4359-800c-1856acec29bc" message="+put-action-workers-by-list"/>
+		<ee:transform doc:name="" doc:id="3d722bac-49f0-422f-9d50-a797ad8a4a91" >
+			<ee:message >
+				<ee:set-payload ><![CDATA[%dw 2.0
+output application/json
+---
+{
+	"action": payload.action,
+	"domains": payload.members
+}]]></ee:set-payload>
+			</ee:message>
+			<ee:variables >
+			</ee:variables>
+		</ee:transform>
+		<http:request method="PUT" doc:name="Request" doc:id="99311ebe-8c75-4bfb-8f20-39c0b62b488a" config-ref="HTTP_Request_configuration-w-token-mgr" path="#[p('http.request.applications.path')]">
+			<http:headers><![CDATA[#[output application/java
+---
+{
+	"X-ANYPNT-ENV-ID" : p('secure::cloudhub.envId'),
+	"Content-Type" : "application/json"
+}]]]></http:headers>
+		</http:request>
+		<flow-ref doc:name="get-workers-details-w-token-mgr" doc:id="5ac75a9e-eb9a-47ef-98c6-91cc41297bf6" name="get-workers-details-w-token-mgr" />
 		<logger level="INFO" doc:name="Logger" doc:id="e2d43fef-c8e8-4268-8fae-a413821ebbb4" message="-put-action-workers-by-list" />
 	</flow>
 </mule>

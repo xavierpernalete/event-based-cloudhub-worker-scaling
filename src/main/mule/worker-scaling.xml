@@ -61,29 +61,6 @@
         <flow-ref doc:name="clear-all-groups" doc:id="90778c12-c964-459b-811f-f8f067bb5914" name="clear-all-groups" />
     </flow>
     <flow name="put:\workers:application\json:worker-scaling-config">
-        <ee:transform xsi:schemaLocation="http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd">
-            <ee:message>
-                <ee:set-payload><![CDATA[%dw 2.0
-output application/json
----
-{
-  muleApps: [
-    {
-      domain: "support-email-s",
-      status: "STOPPED"
-    }, 
-    {
-      domain: "support-address-s",
-      status: "STOPPED"
-    }, 
-    {
-      domain: "premise-serviceorder-s",
-      status: "STOPPED"
-    }
-  ]
-}]]></ee:set-payload>
-            </ee:message>
-        </ee:transform>
         <flow-ref doc:name="put-action-workers-by-list" doc:id="79091bf1-6934-4a1c-b665-6b23ea188c24" name="put-action-workers-by-list" />
     </flow>
     <flow name="put:\workers\(groupId):application\json:worker-scaling-config">

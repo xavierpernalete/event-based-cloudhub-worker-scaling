@@ -12,15 +12,9 @@ http:
   response: "30000"
   applications:
    path: "/cloudhub/api/v2/applications/"
-  alerts:  
-   path: "/cloudhub/api/v2/alerts/"
   token:
    path: "/accounts/api/v2/oauth2/token"
    url: "https://anypoint.mulesoft.com/accounts/api/v2/oauth2/token"
-
-# Cloudhub Runtime Manager Alert IDs
-alerts:
-  id: ""
 
 https:
  private:
