@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<mule xmlns:ee="http://www.mulesoft.org/schema/mule/ee/core" xmlns:os="http://www.mulesoft.org/schema/mule/os"
+	xmlns="http://www.mulesoft.org/schema/mule/core"
+	xmlns:doc="http://www.mulesoft.org/schema/mule/documentation" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
+http://www.mulesoft.org/schema/mule/os http://www.mulesoft.org/schema/mule/os/current/mule-os.xsd
+http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd">
+	<flow name="delete-group-by-group-id" doc:id="c72eb96d-2b89-45ba-be34-a97d04ddbfd8" >
+		<logger level="INFO" doc:name="Logger" doc:id="3d1031f5-0068-4364-912e-db08144c8215" message="+delete-group-by-group-id"/>
+		<os:remove doc:name="Remove" doc:id="1f91c380-526a-4554-9e57-8dbd6d7b5977" key="#[attributes.uriParams.'groupId']" objectStore="Object_store"/>
+		<os:retrieve-all-keys doc:name="Retrieve all keys" doc:id="980754d4-e5b0-434c-ad6f-c4da031ba99c" objectStore="Object_store" />
+		<ee:transform doc:name="Transform Message" doc:id="7ddc3e69-be39-4e7d-bf9f-fd5fc296ebf7" >
+			<ee:message >
+				<ee:set-payload ><![CDATA[%dw 2.0
+output application/json
+---
+{
+	"groups": payload
+}]]></ee:set-payload>
+			</ee:message>
+		</ee:transform>
+		<logger level="INFO" doc:name="Logger" doc:id="8a90f6d5-e0b4-4d7b-a0af-90b00494f668" message="-delete-group-by-group-id" />
+	</flow>
+</mule>

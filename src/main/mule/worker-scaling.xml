@@ -3,7 +3,7 @@
     <http:listener-config name="worker-scaling-httpListenerConfig">
         <http:listener-connection host="0.0.0.0" port="8081" />
     </http:listener-config>
-    <apikit:config name="worker-scaling-config" api="resource::51323221-32f3-4e62-ab9e-709bcaad83e0:worker-scaling:2.0.7:raml:zip:worker-scaling.raml" outboundHeadersMapName="outboundHeaders" httpStatusVarName="httpStatus" />
+    <apikit:config name="worker-scaling-config" api="resource::51323221-32f3-4e62-ab9e-709bcaad83e0:worker-scaling:2.0.8:raml:zip:worker-scaling.raml" outboundHeadersMapName="outboundHeaders" httpStatusVarName="httpStatus" />
     <flow name="worker-scaling-main">
         <http:listener config-ref="worker-scaling-httpListenerConfig" path="/api/*">
             <http:response statusCode="#[vars.httpStatus default 200]">
@@ -64,6 +64,9 @@
         <flow-ref doc:name="put-action-workers-by-list" doc:id="79091bf1-6934-4a1c-b665-6b23ea188c24" name="put-action-workers-by-list" />
     </flow>
     <flow name="put:\workers\(groupId):application\json:worker-scaling-config">
-		<flow-ref doc:name="put-action-workers-by-group" doc:id="8c71e95f-6b8a-4d4a-be6d-5f0673a5fe0d" name="put-action-workers-by-group"/>
+        <flow-ref doc:name="put-action-workers-by-group" doc:id="8c71e95f-6b8a-4d4a-be6d-5f0673a5fe0d" name="put-action-workers-by-group" />
+    </flow>
+    <flow name="delete:\groups\(groupId):worker-scaling-config">
+		<flow-ref doc:name="delete-group-by-group-id" doc:id="a1f2f31b-47f5-4d33-99a7-0c01875872cf" name="delete-group-by-group-id"/>
     </flow>
 </mule>
