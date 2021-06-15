@@ -26,7 +26,7 @@ http://www.mulesoft.org/schema/mule/mule-apikit http://www.mulesoft.org/schema/m
 			logException="true" doc:name="On Error Propagate"
 			doc:id="e4d44d8d-62fb-4351-817b-6135ff6fecdb"
 			when="#[(error.errorType.identifier contains 'BAD_REQUEST') or (error.errorType.identifier contains 'COMPOSITE_ROUTING') or (error.errorType.namespace == 'VALIDATION')]">
-			<ee:transform doc:name="AMRN-400"
+			<ee:transform doc:name="ERR-400"
 				doc:id="a7ba18c2-973f-4788-a0f7-cb96a6dee568">
 				<ee:message>
 					<ee:set-payload resource="transformations/error-handler/bad-request.dwl" />
@@ -46,7 +46,7 @@ http://www.mulesoft.org/schema/mule/mule-apikit http://www.mulesoft.org/schema/m
 			logException="true" doc:name="On Error Propagate"
 			doc:id="4d6669d2-7ce6-4dc2-a187-04c6e2b00e27"
 			when="#[error.errorType.identifier contains 'NOT_FOUND']">
-			<ee:transform doc:name="AMRN-404"
+			<ee:transform doc:name="ERR-404"
 				doc:id="66c4ce1d-ab2b-4aeb-84c8-4af3656b3a29">
 				<ee:message>
 					<ee:set-payload resource="transformations/error-handler/not-found.dwl" />
@@ -84,7 +84,7 @@ http://www.mulesoft.org/schema/mule/mule-apikit http://www.mulesoft.org/schema/m
 			logException="true" doc:name="On Error Propagate"
 			doc:id="8bfdcaf8-e011-4db3-9767-10d629cd6b16"
 			type="APIKIT:NOT_ACCEPTABLE">
-			<ee:transform doc:name="AMRN-406"
+			<ee:transform doc:name="ERR-406"
 				doc:id="e14dc7e2-2d78-452a-abad-dfff81afc6b5">
 				<ee:message>
 					<ee:set-payload><![CDATA[%dw 2.0
@@ -99,7 +99,7 @@ output application/json
       {
         "type": "Error",
         "severity": vars.error.severity default '1',
-        "reasonCode": vars.error.reasonCode default "ADT-406",
+        "reasonCode": vars.error.reasonCode default "ERR-406",
         "message": if(vars.error.description?)   // check for custom message from error variable
 	               	vars.error.description
 	           	   else                         // or from a validation module
@@ -122,7 +122,7 @@ output application/json
 			logException="true" doc:name="On Error Propagate"
 			doc:id="24e1fb5f-9a99-4f37-888f-f7052b70dafe"
 			type="APIKIT:UNSUPPORTED_MEDIA_TYPE">
-			<ee:transform doc:name="AMRN-415"
+			<ee:transform doc:name="ERR-415"
 				doc:id="5677f263-0fae-43d8-b135-d4a83233e28b">
 				<ee:message>
 					<ee:set-payload resource="transformations/error-handler/unsupported-media.dwl" />
@@ -157,7 +157,7 @@ output application/json
 			logException="true" doc:name="On Error Propagate"
 			doc:id="761c6496-20b4-41a2-a582-b258831876f0"
 			type="APIKIT:NOT_IMPLEMENTED">
-			<ee:transform doc:name="AMRN-501"
+			<ee:transform doc:name="ERR-501"
 				doc:id="fe88247f-7a66-4fd4-b803-94b163c0cd55">
 				<ee:message>
 					<ee:set-payload resource="transformations/error-handler/not-implemented.dwl" />
@@ -175,7 +175,7 @@ output application/json
 		<on-error-propagate enableNotifications="true"
 			logException="true" doc:name="On Error Propagate"
 			doc:id="83a89007-ae2e-41a6-b0c5-9073fcfbeedb" type="ANY">
-			<ee:transform doc:name="AMRN-500"
+			<ee:transform doc:name="ERR-500"
 				doc:id="dea9a4fe-7b8a-4304-af9e-9ce93e5a9811">
 				<ee:message>
 					<ee:set-payload resource="transformations/error-handler/internal-error.dwl" />

@@ -10,7 +10,7 @@ output application/json
       {
         "type": "Error",
         "severity": vars.error.severity default '1',
-        "reasonCode": vars.error.reasonCode default "AMRN-400",
+        "reasonCode": vars.error.reasonCode default "ERR-400",
         "message": if(vars.error.description?)   // check for custom message from error variable
 	               	vars.error.description
 	           	   else                         // or from a validation module

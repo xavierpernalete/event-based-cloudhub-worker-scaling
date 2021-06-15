@@ -27,3 +27,5 @@ The following Message Sequence Diagram illustrates the features in the solution 
 
 
 ![Solution Sequence Diagram](/src/main/resources/images/worker-scaling-poc.jpeg) 
+
+
