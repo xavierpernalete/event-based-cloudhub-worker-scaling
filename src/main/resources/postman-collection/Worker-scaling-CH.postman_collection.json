@@ -1,0 +1,1208 @@
+{
+	"info": {
+		"_postman_id": "7ace6b6c-8f28-4c84-9474-6b1842b21a54",
+		"name": "Ameren - worker scaling POC - CH",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "Delete worker groups - CH",
+			"request": {
+				"method": "DELETE",
+				"header": [
+					{
+						"key": "Content-Type",
+						"type": "text",
+						"value": "application/json"
+					},
+					{
+						"key": "client_id",
+						"type": "text",
+						"value": "{{client_id}}"
+					},
+					{
+						"key": "client_secret",
+						"type": "text",
+						"value": "{{client_secret}}"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": ""
+				},
+				"url": {
+					"raw": "http://{{work-scaler-host}}/api/groups",
+					"protocol": "http",
+					"host": [
+						"{{work-scaler-host}}"
+					],
+					"path": [
+						"api",
+						"groups"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Delete group \"support\" by ID - CH",
+			"request": {
+				"method": "DELETE",
+				"header": [
+					{
+						"key": "Content-Type",
+						"type": "text",
+						"value": "application/json"
+					},
+					{
+						"key": "client_id",
+						"type": "text",
+						"value": "{{client_id}}"
+					},
+					{
+						"key": "client_secret",
+						"type": "text",
+						"value": "{{client_secret}}"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": ""
+				},
+				"url": {
+					"raw": "http://{{work-scaler-host}}/api/groups/support",
+					"protocol": "http",
+					"host": [
+						"{{work-scaler-host}}"
+					],
+					"path": [
+						"api",
+						"groups",
+						"support"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get all groups - CH",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Content-Type",
+						"type": "text",
+						"value": "application/json"
+					},
+					{
+						"key": "client_id",
+						"type": "text",
+						"value": "{{client_id}}"
+					},
+					{
+						"key": "client_secret",
+						"type": "text",
+						"value": "{{client_secret}}"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": ""
+				},
+				"url": {
+					"raw": "http://{{work-scaler-host}}/api/groups",
+					"protocol": "http",
+					"host": [
+						"{{work-scaler-host}}"
+					],
+					"path": [
+						"api",
+						"groups"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Post worker \"support-email-s\" to group \"support\" - CH",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"type": "text",
+						"value": "application/json"
+					},
+					{
+						"key": "client_id",
+						"type": "text",
+						"value": "{{client_id}}"
+					},
+					{
+						"key": "client_secret",
+						"type": "text",
+						"value": "{{client_secret}}"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n  \"member\": \"support-email-s\"\n}"
+				},
+				"url": {
+					"raw": "http://{{work-scaler-host}}/api/groups/support",
+					"protocol": "http",
+					"host": [
+						"{{work-scaler-host}}"
+					],
+					"path": [
+						"api",
+						"groups",
+						"support"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Post worker \"support-address-s\" to group \"support\" - CH",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"type": "text",
+						"value": "application/json"
+					},
+					{
+						"key": "client_id",
+						"type": "text",
+						"value": "{{client_id}}"
+					},
+					{
+						"key": "client_secret",
+						"type": "text",
+						"value": "{{client_secret}}"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n  \"member\": \"support-address-s\"\n}"
+				},
+				"url": {
+					"raw": "http://{{work-scaler-host}}/api/groups/support",
+					"protocol": "http",
+					"host": [
+						"{{work-scaler-host}}"
+					],
+					"path": [
+						"api",
+						"groups",
+						"support"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Post worker \"premise-serviceorder-s\" to group \"support\" - CH",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"type": "text",
+						"value": "application/json"
+					},
+					{
+						"key": "client_id",
+						"type": "text",
+						"value": "{{client_id}}"
+					},
+					{
+						"key": "client_secret",
+						"type": "text",
+						"value": "{{client_secret}}"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n  \"member\": \"premise-serviceorder-s\"\n}"
+				},
+				"url": {
+					"raw": "http://{{work-scaler-host}}/api/groups/support",
+					"protocol": "http",
+					"host": [
+						"{{work-scaler-host}}"
+					],
+					"path": [
+						"api",
+						"groups",
+						"support"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Post worker \"ecustomer-info-s\" to group \"customer\" - CH",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"type": "text",
+						"value": "application/json"
+					},
+					{
+						"key": "client_id",
+						"type": "text",
+						"value": "{{client_id}}"
+					},
+					{
+						"key": "client_secret",
+						"type": "text",
+						"value": "{{client_secret}}"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n  \"member\": \"ecustomer-info-s\"\n}"
+				},
+				"url": {
+					"raw": "http://{{work-scaler-host}}/api/groups/customer",
+					"protocol": "http",
+					"host": [
+						"{{work-scaler-host}}"
+					],
+					"path": [
+						"api",
+						"groups",
+						"customer"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Post worker \"account-info-s\" to group \"customer\" - CH",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"type": "text",
+						"value": "application/json"
+					},
+					{
+						"key": "client_id",
+						"type": "text",
+						"value": "{{client_id}}"
+					},
+					{
+						"key": "client_secret",
+						"type": "text",
+						"value": "{{client_secret}}"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n  \"member\": \"account-info-s\"\n}"
+				},
+				"url": {
+					"raw": "http://{{work-scaler-host}}/api/groups/customer",
+					"protocol": "http",
+					"host": [
+						"{{work-scaler-host}}"
+					],
+					"path": [
+						"api",
+						"groups",
+						"customer"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Post worker \"account-enrollment-s\" to group \"customer\" - CH",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"type": "text",
+						"value": "application/json"
+					},
+					{
+						"key": "client_id",
+						"type": "text",
+						"value": "{{client_id}}"
+					},
+					{
+						"key": "client_secret",
+						"type": "text",
+						"value": "{{client_secret}}"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n  \"member\": \"account-enrollment-s\"\n}"
+				},
+				"url": {
+					"raw": "http://{{work-scaler-host}}/api/groups/customer",
+					"protocol": "http",
+					"host": [
+						"{{work-scaler-host}}"
+					],
+					"path": [
+						"api",
+						"groups",
+						"customer"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Put worker to group - \"support\" - CH",
+			"request": {
+				"method": "PUT",
+				"header": [
+					{
+						"key": "Content-Type",
+						"type": "text",
+						"value": "application/json"
+					},
+					{
+						"key": "client_id",
+						"type": "text",
+						"value": "{{client_id}}"
+					},
+					{
+						"key": "client_secret",
+						"type": "text",
+						"value": "{{client_secret}}"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n  \"member\": [\n      \"support-email-s\",\n      \"support-address-s\",\n      \"premise-serviceorder-s\"\n  ]\n}"
+				},
+				"url": {
+					"raw": "http://{{work-scaler-host}}/api/groups/support",
+					"protocol": "http",
+					"host": [
+						"{{work-scaler-host}}"
+					],
+					"path": [
+						"api",
+						"groups",
+						"support"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Put worker to group - \"customer\" - CH",
+			"request": {
+				"method": "PUT",
+				"header": [
+					{
+						"key": "Content-Type",
+						"type": "text",
+						"value": "application/json"
+					},
+					{
+						"key": "client_id",
+						"type": "text",
+						"value": "{{client_id}}"
+					},
+					{
+						"key": "client_secret",
+						"type": "text",
+						"value": "{{client_secret}}"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n  \"member\": [\n      \"ecustomer-info-s\",\n      \"account-info-s\",\n      \"account-enrollment-s\"\n  ]\n}"
+				},
+				"url": {
+					"raw": "http://{{work-scaler-host}}/api/groups/customer",
+					"protocol": "http",
+					"host": [
+						"{{work-scaler-host}}"
+					],
+					"path": [
+						"api",
+						"groups",
+						"customer"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Put worker to group - \"billings\" - CH",
+			"request": {
+				"method": "PUT",
+				"header": [
+					{
+						"key": "Content-Type",
+						"type": "text",
+						"value": "application/json"
+					},
+					{
+						"key": "client_id",
+						"type": "text",
+						"value": "{{client_id}}"
+					},
+					{
+						"key": "client_secret",
+						"type": "text",
+						"value": "{{client_secret}}"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n  \"member\": [\n      \"billaccount-details-p\",\n      \"user-billaccountsummary-p\",\n      \"web-billaccountsummary-e\",\n      \"finance-paymentagreement-s\",\n      \"finance-collection-s\"\n  ]\n}"
+				},
+				"url": {
+					"raw": "http://{{work-scaler-host}}/api/groups/billings",
+					"protocol": "http",
+					"host": [
+						"{{work-scaler-host}}"
+					],
+					"path": [
+						"api",
+						"groups",
+						"billings"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get members for group - \"support\" - CH",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Content-Type",
+						"type": "text",
+						"value": "application/json"
+					},
+					{
+						"key": "client_id",
+						"type": "text",
+						"value": "{{client_id}}"
+					},
+					{
+						"key": "client_secret",
+						"type": "text",
+						"value": "{{client_secret}}"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": ""
+				},
+				"url": {
+					"raw": "http://{{work-scaler-host}}/api/groups/support",
+					"protocol": "http",
+					"host": [
+						"{{work-scaler-host}}"
+					],
+					"path": [
+						"api",
+						"groups",
+						"support"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get members for group - \"customer\" - CH",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Content-Type",
+						"type": "text",
+						"value": "application/json"
+					},
+					{
+						"key": "client_id",
+						"type": "text",
+						"value": "{{client_id}}"
+					},
+					{
+						"key": "client_secret",
+						"type": "text",
+						"value": "{{client_secret}}"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": ""
+				},
+				"url": {
+					"raw": "http://{{work-scaler-host}}/api/groups/customer",
+					"protocol": "http",
+					"host": [
+						"{{work-scaler-host}}"
+					],
+					"path": [
+						"api",
+						"groups",
+						"customer"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get members for group - \"billings\" - CH",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Content-Type",
+						"type": "text",
+						"value": "application/json"
+					},
+					{
+						"key": "client_id",
+						"type": "text",
+						"value": "{{client_id}}"
+					},
+					{
+						"key": "client_secret",
+						"type": "text",
+						"value": "{{client_secret}}"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": ""
+				},
+				"url": {
+					"raw": "http://{{work-scaler-host}}/api/groups/billings",
+					"protocol": "http",
+					"host": [
+						"{{work-scaler-host}}"
+					],
+					"path": [
+						"api",
+						"groups",
+						"billings"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get workers - \"support\" - CH",
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "client_id",
+						"type": "text",
+						"value": "{{client_id}}"
+					},
+					{
+						"key": "client_secret",
+						"type": "text",
+						"value": "{{client_secret}}"
+					},
+					{
+						"key": "Content-Type",
+						"type": "text",
+						"value": "application/json"
+					}
+				],
+				"url": {
+					"raw": "http://{{work-scaler-host}}/api/workers/support",
+					"protocol": "http",
+					"host": [
+						"{{work-scaler-host}}"
+					],
+					"path": [
+						"api",
+						"workers",
+						"support"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get workers - \"customer\" - CH",
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "client_id",
+						"type": "text",
+						"value": "{{client_id}}"
+					},
+					{
+						"key": "client_secret",
+						"type": "text",
+						"value": "{{client_secret}}"
+					},
+					{
+						"key": "Content-Type",
+						"type": "text",
+						"value": "application/json"
+					}
+				],
+				"url": {
+					"raw": "http://{{work-scaler-host}}/api/workers/customer",
+					"protocol": "http",
+					"host": [
+						"{{work-scaler-host}}"
+					],
+					"path": [
+						"api",
+						"workers",
+						"customer"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get workers - \"billings\" - CH",
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "client_id",
+						"type": "text",
+						"value": "{{client_id}}"
+					},
+					{
+						"key": "client_secret",
+						"type": "text",
+						"value": "{{client_secret}}"
+					},
+					{
+						"key": "Content-Type",
+						"type": "text",
+						"value": "application/json"
+					}
+				],
+				"url": {
+					"raw": "http://{{work-scaler-host}}/api/workers/billings",
+					"protocol": "http",
+					"host": [
+						"{{work-scaler-host}}"
+					],
+					"path": [
+						"api",
+						"workers",
+						"billings"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Scale 3 \"support\" workers horizontally to 3 workers - CH",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"type": "text",
+						"value": "application/json"
+					},
+					{
+						"key": "client_id",
+						"type": "text",
+						"value": "{{client_id}}"
+					},
+					{
+						"key": "client_secret",
+						"type": "text",
+						"value": "{{client_secret}}"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n  \"muleApps\":\n  [\n    {\n      \"domain\": \"support-email-s\",\n      \"workers\":\n      {\n          \"amount\": 3\n      }\n    },\n    {\n      \"domain\": \"support-address-s\",\n      \"workers\":\n      {\n          \"amount\": 3\n      }\n    },\n    {\n      \"domain\": \"premise-serviceorder-s\",\n      \"workers\":\n      {\n          \"amount\": 3\n      }\n    }\n  ]\n}"
+				},
+				"url": {
+					"raw": "http://{{work-scaler-host}}/api/workers/horizontalScale",
+					"protocol": "http",
+					"host": [
+						"{{work-scaler-host}}"
+					],
+					"path": [
+						"api",
+						"workers",
+						"horizontalScale"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Scale 3 \"support\" workers horizontally to 2 workers - CH",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"type": "text",
+						"value": "application/json"
+					},
+					{
+						"key": "client_id",
+						"type": "text",
+						"value": "{{client_id}}"
+					},
+					{
+						"key": "client_secret",
+						"type": "text",
+						"value": "{{client_secret}}"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n  \"muleApps\":\n  [\n    {\n      \"domain\": \"support-email-s\",\n      \"workers\":\n      {\n          \"amount\": 2\n      }\n    },\n    {\n      \"domain\": \"support-address-s\",\n      \"workers\":\n      {\n          \"amount\": 2\n      }\n    },\n    {\n      \"domain\": \"premise-serviceorder-s\",\n      \"workers\":\n      {\n          \"amount\": 2\n      }\n    }\n  ]\n}"
+				},
+				"url": {
+					"raw": "http://{{work-scaler-host}}/api/workers/horizontalScale",
+					"protocol": "http",
+					"host": [
+						"{{work-scaler-host}}"
+					],
+					"path": [
+						"api",
+						"workers",
+						"horizontalScale"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Add \"support\" workers horizontally incrementally - CH",
+			"request": {
+				"method": "PUT",
+				"header": [
+					{
+						"key": "Content-Type",
+						"type": "text",
+						"value": "application/json"
+					},
+					{
+						"key": "client_id",
+						"type": "text",
+						"value": "{{client_id}}"
+					},
+					{
+						"key": "client_secret",
+						"type": "text",
+						"value": "{{client_secret}}"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n  \"muleApps\":\n  [\n    {\n      \"domain\": \"support-email-s\",\n      \"workers\":\n      {\n          \"amount\": 1\n      }\n    },\n    {\n      \"domain\": \"support-address-s\",\n      \"workers\":\n      {\n          \"amount\": 2\n      }\n    },\n    {\n      \"domain\": \"premise-serviceorder-s\",\n      \"workers\":\n      {\n          \"amount\": 3\n      }\n    }\n  ]\n}"
+				},
+				"url": {
+					"raw": "http://{{work-scaler-host}}/api/workers/horizontalScale/increaseBy",
+					"protocol": "http",
+					"host": [
+						"{{work-scaler-host}}"
+					],
+					"path": [
+						"api",
+						"workers",
+						"horizontalScale",
+						"increaseBy"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Remove \"support\" workers horizontally incrementally - CH",
+			"request": {
+				"method": "PUT",
+				"header": [
+					{
+						"key": "Content-Type",
+						"type": "text",
+						"value": "application/json"
+					},
+					{
+						"key": "client_id",
+						"type": "text",
+						"value": "{{client_id}}"
+					},
+					{
+						"key": "client_secret",
+						"type": "text",
+						"value": "{{client_secret}}"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n  \"muleApps\":\n  [\n    {\n      \"domain\": \"support-email-s\",\n      \"workers\":\n      {\n          \"amount\": 1\n      }\n    },\n    {\n      \"domain\": \"support-address-s\",\n      \"workers\":\n      {\n          \"amount\": 2\n      }\n    },\n    {\n      \"domain\": \"premise-serviceorder-s\",\n      \"workers\":\n      {\n          \"amount\": 3\n      }\n    }\n  ]\n}"
+				},
+				"url": {
+					"raw": "http://{{work-scaler-host}}/api/workers/horizontalScale/decreaseBy",
+					"protocol": "http",
+					"host": [
+						"{{work-scaler-host}}"
+					],
+					"path": [
+						"api",
+						"workers",
+						"horizontalScale",
+						"decreaseBy"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "STOP worker in group - \"support\" - CH",
+			"request": {
+				"method": "PUT",
+				"header": [
+					{
+						"key": "Content-Type",
+						"type": "text",
+						"value": "application/json"
+					},
+					{
+						"key": "client_id",
+						"type": "text",
+						"value": "{{client_id}}"
+					},
+					{
+						"key": "client_secret",
+						"type": "text",
+						"value": "{{client_secret}}"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"action\": \"STOP\"\n}"
+				},
+				"url": {
+					"raw": "http://{{work-scaler-host}}/api/workers/support",
+					"protocol": "http",
+					"host": [
+						"{{work-scaler-host}}"
+					],
+					"path": [
+						"api",
+						"workers",
+						"support"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "START worker in group - \"support\" - CH",
+			"request": {
+				"method": "PUT",
+				"header": [
+					{
+						"key": "Content-Type",
+						"type": "text",
+						"value": "application/json"
+					},
+					{
+						"key": "client_id",
+						"type": "text",
+						"value": "{{client_id}}"
+					},
+					{
+						"key": "client_secret",
+						"type": "text",
+						"value": "{{client_secret}}"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"action\": \"START\"\n}"
+				},
+				"url": {
+					"raw": "http://{{work-scaler-host}}/api/workers/support",
+					"protocol": "http",
+					"host": [
+						"{{work-scaler-host}}"
+					],
+					"path": [
+						"api",
+						"workers",
+						"support"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "RESTART worker in group - \"support\" - CH",
+			"request": {
+				"method": "PUT",
+				"header": [
+					{
+						"key": "Content-Type",
+						"type": "text",
+						"value": "application/json"
+					},
+					{
+						"key": "client_id",
+						"type": "text",
+						"value": "{{client_id}}"
+					},
+					{
+						"key": "client_secret",
+						"type": "text",
+						"value": "{{client_secret}}"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"action\": \"RESTART\"\n}"
+				},
+				"url": {
+					"raw": "http://{{work-scaler-host}}/api/workers/support",
+					"protocol": "http",
+					"host": [
+						"{{work-scaler-host}}"
+					],
+					"path": [
+						"api",
+						"workers",
+						"support"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "** DELETE worker in group - \"support\" - CH",
+			"request": {
+				"method": "PUT",
+				"header": [
+					{
+						"key": "Content-Type",
+						"type": "text",
+						"value": "application/json"
+					},
+					{
+						"key": "client_id",
+						"type": "text",
+						"value": "{{client_id}}"
+					},
+					{
+						"key": "client_secret",
+						"type": "text",
+						"value": "{{client_secret}}"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"action\": \"DELETE\"\n}"
+				},
+				"url": {
+					"raw": "http://{{work-scaler-host}}/api/workers/support",
+					"protocol": "http",
+					"host": [
+						"{{work-scaler-host}}"
+					],
+					"path": [
+						"api",
+						"workers",
+						"support"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "STOP worker in list - CH",
+			"request": {
+				"method": "PUT",
+				"header": [
+					{
+						"key": "Content-Type",
+						"type": "text",
+						"value": "application/json"
+					},
+					{
+						"key": "client_id",
+						"type": "text",
+						"value": "{{client_id}}"
+					},
+					{
+						"key": "client_secret",
+						"type": "text",
+						"value": "{{client_secret}}"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"action\": \"STOP\",\n    \"members\": [\n        \"support-email-s\",\n        \"support-address-s\",\n        \"premise-serviceorder-s\"\n    ]\n}"
+				},
+				"url": {
+					"raw": "http://{{work-scaler-host}}/api/workers",
+					"protocol": "http",
+					"host": [
+						"{{work-scaler-host}}"
+					],
+					"path": [
+						"api",
+						"workers"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "START worker in list - CH",
+			"request": {
+				"method": "PUT",
+				"header": [
+					{
+						"key": "Content-Type",
+						"type": "text",
+						"value": "application/json"
+					},
+					{
+						"key": "client_id",
+						"type": "text",
+						"value": "{{client_id}}"
+					},
+					{
+						"key": "client_secret",
+						"type": "text",
+						"value": "{{client_secret}}"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"action\": \"START\",\n    \"members\": [\n        \"support-email-s\",\n        \"support-address-s\",\n        \"premise-serviceorder-s\"\n    ]\n}"
+				},
+				"url": {
+					"raw": "http://{{work-scaler-host}}/api/workers/support",
+					"protocol": "http",
+					"host": [
+						"{{work-scaler-host}}"
+					],
+					"path": [
+						"api",
+						"workers",
+						"support"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "RESTART worker in list - CH",
+			"request": {
+				"method": "PUT",
+				"header": [
+					{
+						"key": "Content-Type",
+						"type": "text",
+						"value": "application/json"
+					},
+					{
+						"key": "client_id",
+						"type": "text",
+						"value": "{{client_id}}"
+					},
+					{
+						"key": "client_secret",
+						"type": "text",
+						"value": "{{client_secret}}"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"action\": \"RESTART\",\n    \"members\": [\n        \"support-email-s\",\n        \"support-address-s\",\n        \"premise-serviceorder-s\"\n    ]\n}"
+				},
+				"url": {
+					"raw": "http://{{work-scaler-host}}/api/workers/support",
+					"protocol": "http",
+					"host": [
+						"{{work-scaler-host}}"
+					],
+					"path": [
+						"api",
+						"workers",
+						"support"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "** DELETE worker in list - CH",
+			"request": {
+				"method": "PUT",
+				"header": [
+					{
+						"key": "Content-Type",
+						"type": "text",
+						"value": "application/json"
+					},
+					{
+						"key": "client_id",
+						"type": "text",
+						"value": "{{client_id}}"
+					},
+					{
+						"key": "client_secret",
+						"type": "text",
+						"value": "{{client_secret}}"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"action\": \"DELETE\",\n    \"members\": [\n        \"support-email-s\",\n        \"support-address-s\",\n        \"premise-serviceorder-s\"\n    ]\n}"
+				},
+				"url": {
+					"raw": "http://{{work-scaler-host}}/api/workers/support",
+					"protocol": "http",
+					"host": [
+						"{{work-scaler-host}}"
+					],
+					"path": [
+						"api",
+						"workers",
+						"support"
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}

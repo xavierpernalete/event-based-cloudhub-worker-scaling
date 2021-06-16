@@ -26,7 +26,7 @@ The Event-based Scaling API solution gives control to customers in determining w
 
 The following Message Sequence Diagram illustrates the features in the solution grouped as followed:
 1. Group operations: Provides the ability to group a number of Mule apps in group names. Multiple groups can be created and maintained through their own lifecycles. Group is a useful way to collect a number of Mule apps that can be scaled together in response to an external event.
-2. Worker scaling: One or more Mule apps to be scaled, either to an exact number of workers, or by incremental numbers (both add or remove). Group is supported.
+2. Worker scaling: One or more Mule apps to be scaled horizontally, either to an exact number of workers, or by incremental numbers (both add or remove). Group is supported.
 3. Worker lifecycle: In addition to worker scaling, this solution includes lifecyle operations for Mule apps. This is useful to work on a list of Mule apps or by their associated groups. Currently supported actions for workers include START, STOP, RESTART and DELETE.
 
 
