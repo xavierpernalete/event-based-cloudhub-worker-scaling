@@ -42,8 +42,6 @@ The following Message Sequence Diagram illustrates the features in the solution 
 
 ```
 cloudhub:
- username: "![DXWkVIOuGMctxNRxVujq5Q==]"
- password: "![wwm/G6xZDi0jCxWmlSKkxw==]"
  envId: "![tWePvMWeSyltCtYlK3qgWxbbYO8pv+gpN7DcSnih7rRorHN3slQIqusDvDePZl1s]"
  orgId: "![H+G8IANjpUg1OCyx5pz+cF8NuwSOaTayK25C8KKd1camprh9XPKxtZ5sihTHBQuZ]"
 connectedApp:
