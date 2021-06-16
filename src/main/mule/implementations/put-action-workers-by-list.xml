@@ -18,6 +18,10 @@ output application/json
 }]]></ee:set-payload>
 			</ee:message>
 			<ee:variables >
+				<ee:set-variable variableName="members" ><![CDATA[%dw 2.0
+output application/java
+---
+payload.members]]></ee:set-variable>
 			</ee:variables>
 		</ee:transform>
 		<http:request method="PUT" doc:name="Request" doc:id="99311ebe-8c75-4bfb-8f20-39c0b62b488a" config-ref="HTTP_Request_configuration-w-token-mgr" path="#[p('http.request.applications.path')]">
