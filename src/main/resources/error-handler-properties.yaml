@@ -1,1 +1,1 @@
-errorhandler.logger.category: "com.ameren.mulesoft.worker-scaling"
+errorhandler.logger.category: "com.company.mulesoft.worker-scaling"
