@@ -3,18 +3,18 @@
 ## Introduction
 
 Mule applications or APIs are deployed into Anypoint CloudHub (CH) with an initial number of workers. From time-to-time, business demands or external events may cause increased workload to these CH workers. For example, 
-- a retailer may anticipate increased product inquiries during a promotional campaign launching in the next few days, or 
+- a retailer may anticipate increased product inquiries during an upcoming promotional campaign to be launched in the next few days, or 
 - a utility may expect higher incident reports when a storm is forecasted to move into an area in the next few hours. 
 
-In anticipation of such events that will bring adidtional workload/traffic to relevant Mule apps, operations may want to prepare these Mule apps with additional workers to handle extra workload *before* the event occurs. Hence the solution for Event-based Scaling was created to address such scenarios.
+In anticipation of such events that will bring adidtional workload/traffic to relevant Mule apps, operations personnel may want to prepare these Mule apps with additional workers to handle extra workload *before* the event occurs. Hence the solution for Event-based Scaling was created to address such scenarios.
 
 ## Scope
 
-Event-based Scaling is only currently designed for scaling CH workers horizontally, i.e. increasing or decreasing the number of workers for Mule apps. Although it is possible to enhance the solution to include vertical scaling of CH workers (changing worker's CPU or memory allocations), that is currently not in scope. The HTTP listeners can be modified to HTTPS by including your SSL keystore and trust stores. 
+Event-based Scaling is only currently designed for scaling CH workers horizontally, i.e. increasing or decreasing the number of workers for Mule apps. Although it is possible to enhance the solution to include vertical scaling of CH workers (changing worker's CPU or memory allocations), that is currently not in scope. The HTTPS listeners can be modified to replacing the TLS context with your SSL keystore and trust stores. 
 
 ## Audience
 
-The audience of this solution includes Operations personnel responsible for Mule apps deployed in production VPC of CH.
+The audience of this solution includes Operations personnel responsible for Mule apps deployed in production Virtual Private Cloud (VPC) of CH.
 
 # Background on CloudHub Worker scaling
 
@@ -37,21 +37,23 @@ The following Message Sequence Diagram illustrates the features in the solution 
 - properties used by this API.
 ### `src/main/resources/secure-props.yaml`:
 - All entries here are encrypted. The encryption key is stored under `mule.encryption.key` in `global.xml`
+- For more information on how to encrypt values see here: [Encrypt text strings](https://docs.mulesoft.com/mule-runtime/4.3/secure-configuration-properties#encrypt-text-strings)
 - Provide Organization and Environment IDs for this API to work with.
 - Create a Connected Apps entry `WorkerScaler` under Anypoint Access Management, with scopes of `Runtime Manager > Manage Settings` and `Runtime Manager > Read Applications`. Once the Connected App is created, get the associated `client_id` and `client_secret` and enter them here.
 
 ```
 cloudhub:
- envId: "![tWePvMWeSyltCtYlK3qgWxbbYO8pv+gpN7DcSnih7rRorHN3slQIqusDvDePZl1s]"
- orgId: "![H+G8IANjpUg1OCyx5pz+cF8NuwSOaTayK25C8KKd1camprh9XPKxtZ5sihTHBQuZ]"
+ envId: "![your-encrypted-environment-id]"
+ orgId: "![your-encrypted-organization-id]"
 connectedApp:
  workerScaler:
-  client_id: "![qLYywtIrVJ2y35ldVxp4WKFEq5pkE5DiFd+CQWJ+VxfDk7L1yQXZsb5eeklJo6WF]"
-  client_secret: "![4OQhWxuWwbMydxI7YSLeGn8V7mO3Zup0wBcTwQ2pWUe3c8g0SWxx7S8RE05wNnxa]"
+  client_id: "![your-encrypted-connected-apps-client-id]"
+  client_secret: "![your-encrypted-connected-apps-client-secret]"
 ```
 
 ## Postman Collection
 - A collection of helpful Postman HTTP invocations to the API is available under `src/main/resources/postman-collection`
-- The following diagram illustrates the `groups` and their members to demonstrate group-related operations:
+- The Postman collection makes use of the Environment Variables of Postman. The variables used and to be replaced with your own values are: `client_id`, `client_secret`, and `work-scaler-host`
+- The following diagram illustrates the `groups` and their members that are used to demonstrate group-related operations:
 
 ![Group diagram](/src/main/resources/images/groups-postman.jpeg)

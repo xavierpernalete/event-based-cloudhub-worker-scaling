@@ -1,10 +1,52 @@
 {
 	"info": {
 		"_postman_id": "7ace6b6c-8f28-4c84-9474-6b1842b21a54",
-		"name": "Ameren - worker scaling POC - CH",
+		"name": "Worker scaling POC - CH",
 		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
 	},
 	"item": [
+		{
+			"name": "Get all groups - CH",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Content-Type",
+						"type": "text",
+						"value": "application/json"
+					},
+					{
+						"key": "client_id",
+						"type": "text",
+						"value": "{{client_id}}"
+					},
+					{
+						"key": "client_secret",
+						"type": "text",
+						"value": "{{client_secret}}"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": ""
+				},
+				"url": {
+					"raw": "https://{{work-scaler-host}}/api/groups",
+					"protocol": "https",
+					"host": [
+						"{{work-scaler-host}}"
+					],
+					"path": [
+						"api",
+						"groups"
+					]
+				}
+			},
+			"response": []
+		},
 		{
 			"name": "Delete worker groups - CH",
 			"request": {
@@ -31,8 +73,8 @@
 					"raw": ""
 				},
 				"url": {
-					"raw": "http://{{work-scaler-host}}/api/groups",
-					"protocol": "http",
+					"raw": "https://{{work-scaler-host}}/api/groups",
+					"protocol": "https",
 					"host": [
 						"{{work-scaler-host}}"
 					],
@@ -70,8 +112,8 @@
 					"raw": ""
 				},
 				"url": {
-					"raw": "http://{{work-scaler-host}}/api/groups/support",
-					"protocol": "http",
+					"raw": "https://{{work-scaler-host}}/api/groups/support",
+					"protocol": "https",
 					"host": [
 						"{{work-scaler-host}}"
 					],
@@ -79,48 +121,6 @@
 						"api",
 						"groups",
 						"support"
-					]
-				}
-			},
-			"response": []
-		},
-		{
-			"name": "Get all groups - CH",
-			"protocolProfileBehavior": {
-				"disableBodyPruning": true
-			},
-			"request": {
-				"method": "GET",
-				"header": [
-					{
-						"key": "Content-Type",
-						"type": "text",
-						"value": "application/json"
-					},
-					{
-						"key": "client_id",
-						"type": "text",
-						"value": "{{client_id}}"
-					},
-					{
-						"key": "client_secret",
-						"type": "text",
-						"value": "{{client_secret}}"
-					}
-				],
-				"body": {
-					"mode": "raw",
-					"raw": ""
-				},
-				"url": {
-					"raw": "http://{{work-scaler-host}}/api/groups",
-					"protocol": "http",
-					"host": [
-						"{{work-scaler-host}}"
-					],
-					"path": [
-						"api",
-						"groups"
 					]
 				}
 			},
@@ -152,8 +152,8 @@
 					"raw": "{\n  \"member\": \"support-email-s\"\n}"
 				},
 				"url": {
-					"raw": "http://{{work-scaler-host}}/api/groups/support",
-					"protocol": "http",
+					"raw": "https://{{work-scaler-host}}/api/groups/support",
+					"protocol": "https",
 					"host": [
 						"{{work-scaler-host}}"
 					],
@@ -192,8 +192,8 @@
 					"raw": "{\n  \"member\": \"support-address-s\"\n}"
 				},
 				"url": {
-					"raw": "http://{{work-scaler-host}}/api/groups/support",
-					"protocol": "http",
+					"raw": "https://{{work-scaler-host}}/api/groups/support",
+					"protocol": "https",
 					"host": [
 						"{{work-scaler-host}}"
 					],
@@ -232,8 +232,8 @@
 					"raw": "{\n  \"member\": \"premise-serviceorder-s\"\n}"
 				},
 				"url": {
-					"raw": "http://{{work-scaler-host}}/api/groups/support",
-					"protocol": "http",
+					"raw": "https://{{work-scaler-host}}/api/groups/support",
+					"protocol": "https",
 					"host": [
 						"{{work-scaler-host}}"
 					],
@@ -272,8 +272,8 @@
 					"raw": "{\n  \"member\": \"ecustomer-info-s\"\n}"
 				},
 				"url": {
-					"raw": "http://{{work-scaler-host}}/api/groups/customer",
-					"protocol": "http",
+					"raw": "https://{{work-scaler-host}}/api/groups/customer",
+					"protocol": "https",
 					"host": [
 						"{{work-scaler-host}}"
 					],
@@ -312,8 +312,8 @@
 					"raw": "{\n  \"member\": \"account-info-s\"\n}"
 				},
 				"url": {
-					"raw": "http://{{work-scaler-host}}/api/groups/customer",
-					"protocol": "http",
+					"raw": "https://{{work-scaler-host}}/api/groups/customer",
+					"protocol": "https",
 					"host": [
 						"{{work-scaler-host}}"
 					],
@@ -352,8 +352,8 @@
 					"raw": "{\n  \"member\": \"account-enrollment-s\"\n}"
 				},
 				"url": {
-					"raw": "http://{{work-scaler-host}}/api/groups/customer",
-					"protocol": "http",
+					"raw": "https://{{work-scaler-host}}/api/groups/customer",
+					"protocol": "https",
 					"host": [
 						"{{work-scaler-host}}"
 					],
@@ -392,8 +392,8 @@
 					"raw": "{\n  \"member\": [\n      \"support-email-s\",\n      \"support-address-s\",\n      \"premise-serviceorder-s\"\n  ]\n}"
 				},
 				"url": {
-					"raw": "http://{{work-scaler-host}}/api/groups/support",
-					"protocol": "http",
+					"raw": "https://{{work-scaler-host}}/api/groups/support",
+					"protocol": "https",
 					"host": [
 						"{{work-scaler-host}}"
 					],
@@ -432,8 +432,8 @@
 					"raw": "{\n  \"member\": [\n      \"ecustomer-info-s\",\n      \"account-info-s\",\n      \"account-enrollment-s\"\n  ]\n}"
 				},
 				"url": {
-					"raw": "http://{{work-scaler-host}}/api/groups/customer",
-					"protocol": "http",
+					"raw": "https://{{work-scaler-host}}/api/groups/customer",
+					"protocol": "https",
 					"host": [
 						"{{work-scaler-host}}"
 					],
@@ -472,8 +472,8 @@
 					"raw": "{\n  \"member\": [\n      \"billaccount-details-p\",\n      \"user-billaccountsummary-p\",\n      \"web-billaccountsummary-e\",\n      \"finance-paymentagreement-s\",\n      \"finance-collection-s\"\n  ]\n}"
 				},
 				"url": {
-					"raw": "http://{{work-scaler-host}}/api/groups/billings",
-					"protocol": "http",
+					"raw": "https://{{work-scaler-host}}/api/groups/billings",
+					"protocol": "https",
 					"host": [
 						"{{work-scaler-host}}"
 					],
@@ -515,8 +515,8 @@
 					"raw": ""
 				},
 				"url": {
-					"raw": "http://{{work-scaler-host}}/api/groups/support",
-					"protocol": "http",
+					"raw": "https://{{work-scaler-host}}/api/groups/support",
+					"protocol": "https",
 					"host": [
 						"{{work-scaler-host}}"
 					],
@@ -558,8 +558,8 @@
 					"raw": ""
 				},
 				"url": {
-					"raw": "http://{{work-scaler-host}}/api/groups/customer",
-					"protocol": "http",
+					"raw": "https://{{work-scaler-host}}/api/groups/customer",
+					"protocol": "https",
 					"host": [
 						"{{work-scaler-host}}"
 					],
@@ -601,8 +601,8 @@
 					"raw": ""
 				},
 				"url": {
-					"raw": "http://{{work-scaler-host}}/api/groups/billings",
-					"protocol": "http",
+					"raw": "https://{{work-scaler-host}}/api/groups/billings",
+					"protocol": "https",
 					"host": [
 						"{{work-scaler-host}}"
 					],
@@ -637,8 +637,8 @@
 					}
 				],
 				"url": {
-					"raw": "http://{{work-scaler-host}}/api/workers/support",
-					"protocol": "http",
+					"raw": "https://{{work-scaler-host}}/api/workers/support",
+					"protocol": "https",
 					"host": [
 						"{{work-scaler-host}}"
 					],
@@ -673,8 +673,8 @@
 					}
 				],
 				"url": {
-					"raw": "http://{{work-scaler-host}}/api/workers/customer",
-					"protocol": "http",
+					"raw": "https://{{work-scaler-host}}/api/workers/customer",
+					"protocol": "https",
 					"host": [
 						"{{work-scaler-host}}"
 					],
@@ -709,8 +709,8 @@
 					}
 				],
 				"url": {
-					"raw": "http://{{work-scaler-host}}/api/workers/billings",
-					"protocol": "http",
+					"raw": "https://{{work-scaler-host}}/api/workers/billings",
+					"protocol": "https",
 					"host": [
 						"{{work-scaler-host}}"
 					],
@@ -749,8 +749,8 @@
 					"raw": "{\n  \"muleApps\":\n  [\n    {\n      \"domain\": \"support-email-s\",\n      \"workers\":\n      {\n          \"amount\": 3\n      }\n    },\n    {\n      \"domain\": \"support-address-s\",\n      \"workers\":\n      {\n          \"amount\": 3\n      }\n    },\n    {\n      \"domain\": \"premise-serviceorder-s\",\n      \"workers\":\n      {\n          \"amount\": 3\n      }\n    }\n  ]\n}"
 				},
 				"url": {
-					"raw": "http://{{work-scaler-host}}/api/workers/horizontalScale",
-					"protocol": "http",
+					"raw": "https://{{work-scaler-host}}/api/workers/horizontalScale",
+					"protocol": "https",
 					"host": [
 						"{{work-scaler-host}}"
 					],
@@ -789,8 +789,8 @@
 					"raw": "{\n  \"muleApps\":\n  [\n    {\n      \"domain\": \"support-email-s\",\n      \"workers\":\n      {\n          \"amount\": 2\n      }\n    },\n    {\n      \"domain\": \"support-address-s\",\n      \"workers\":\n      {\n          \"amount\": 2\n      }\n    },\n    {\n      \"domain\": \"premise-serviceorder-s\",\n      \"workers\":\n      {\n          \"amount\": 2\n      }\n    }\n  ]\n}"
 				},
 				"url": {
-					"raw": "http://{{work-scaler-host}}/api/workers/horizontalScale",
-					"protocol": "http",
+					"raw": "https://{{work-scaler-host}}/api/workers/horizontalScale",
+					"protocol": "https",
 					"host": [
 						"{{work-scaler-host}}"
 					],
@@ -829,8 +829,8 @@
 					"raw": "{\n  \"muleApps\":\n  [\n    {\n      \"domain\": \"support-email-s\",\n      \"workers\":\n      {\n          \"amount\": 1\n      }\n    },\n    {\n      \"domain\": \"support-address-s\",\n      \"workers\":\n      {\n          \"amount\": 2\n      }\n    },\n    {\n      \"domain\": \"premise-serviceorder-s\",\n      \"workers\":\n      {\n          \"amount\": 3\n      }\n    }\n  ]\n}"
 				},
 				"url": {
-					"raw": "http://{{work-scaler-host}}/api/workers/horizontalScale/increaseBy",
-					"protocol": "http",
+					"raw": "https://{{work-scaler-host}}/api/workers/horizontalScale/increaseBy",
+					"protocol": "https",
 					"host": [
 						"{{work-scaler-host}}"
 					],
@@ -870,8 +870,8 @@
 					"raw": "{\n  \"muleApps\":\n  [\n    {\n      \"domain\": \"support-email-s\",\n      \"workers\":\n      {\n          \"amount\": 1\n      }\n    },\n    {\n      \"domain\": \"support-address-s\",\n      \"workers\":\n      {\n          \"amount\": 2\n      }\n    },\n    {\n      \"domain\": \"premise-serviceorder-s\",\n      \"workers\":\n      {\n          \"amount\": 3\n      }\n    }\n  ]\n}"
 				},
 				"url": {
-					"raw": "http://{{work-scaler-host}}/api/workers/horizontalScale/decreaseBy",
-					"protocol": "http",
+					"raw": "https://{{work-scaler-host}}/api/workers/horizontalScale/decreaseBy",
+					"protocol": "https",
 					"host": [
 						"{{work-scaler-host}}"
 					],
@@ -911,8 +911,8 @@
 					"raw": "{\n    \"action\": \"STOP\"\n}"
 				},
 				"url": {
-					"raw": "http://{{work-scaler-host}}/api/workers/support",
-					"protocol": "http",
+					"raw": "https://{{work-scaler-host}}/api/workers/support",
+					"protocol": "https",
 					"host": [
 						"{{work-scaler-host}}"
 					],
@@ -951,8 +951,8 @@
 					"raw": "{\n    \"action\": \"START\"\n}"
 				},
 				"url": {
-					"raw": "http://{{work-scaler-host}}/api/workers/support",
-					"protocol": "http",
+					"raw": "https://{{work-scaler-host}}/api/workers/support",
+					"protocol": "https",
 					"host": [
 						"{{work-scaler-host}}"
 					],
@@ -991,8 +991,8 @@
 					"raw": "{\n    \"action\": \"RESTART\"\n}"
 				},
 				"url": {
-					"raw": "http://{{work-scaler-host}}/api/workers/support",
-					"protocol": "http",
+					"raw": "https://{{work-scaler-host}}/api/workers/support",
+					"protocol": "https",
 					"host": [
 						"{{work-scaler-host}}"
 					],
@@ -1031,8 +1031,8 @@
 					"raw": "{\n    \"action\": \"DELETE\"\n}"
 				},
 				"url": {
-					"raw": "http://{{work-scaler-host}}/api/workers/support",
-					"protocol": "http",
+					"raw": "https://{{work-scaler-host}}/api/workers/support",
+					"protocol": "https",
 					"host": [
 						"{{work-scaler-host}}"
 					],
@@ -1071,8 +1071,8 @@
 					"raw": "{\n    \"action\": \"STOP\",\n    \"members\": [\n        \"support-email-s\",\n        \"support-address-s\",\n        \"premise-serviceorder-s\"\n    ]\n}"
 				},
 				"url": {
-					"raw": "http://{{work-scaler-host}}/api/workers",
-					"protocol": "http",
+					"raw": "https://{{work-scaler-host}}/api/workers",
+					"protocol": "https",
 					"host": [
 						"{{work-scaler-host}}"
 					],
@@ -1110,15 +1110,14 @@
 					"raw": "{\n    \"action\": \"START\",\n    \"members\": [\n        \"support-email-s\",\n        \"support-address-s\",\n        \"premise-serviceorder-s\"\n    ]\n}"
 				},
 				"url": {
-					"raw": "http://{{work-scaler-host}}/api/workers/support",
-					"protocol": "http",
+					"raw": "https://{{work-scaler-host}}/api/workers",
+					"protocol": "https",
 					"host": [
 						"{{work-scaler-host}}"
 					],
 					"path": [
 						"api",
-						"workers",
-						"support"
+						"workers"
 					]
 				}
 			},
@@ -1150,15 +1149,14 @@
 					"raw": "{\n    \"action\": \"RESTART\",\n    \"members\": [\n        \"support-email-s\",\n        \"support-address-s\",\n        \"premise-serviceorder-s\"\n    ]\n}"
 				},
 				"url": {
-					"raw": "http://{{work-scaler-host}}/api/workers/support",
-					"protocol": "http",
+					"raw": "https://{{work-scaler-host}}/api/workers",
+					"protocol": "https",
 					"host": [
 						"{{work-scaler-host}}"
 					],
 					"path": [
 						"api",
-						"workers",
-						"support"
+						"workers"
 					]
 				}
 			},
@@ -1190,15 +1188,14 @@
 					"raw": "{\n    \"action\": \"DELETE\",\n    \"members\": [\n        \"support-email-s\",\n        \"support-address-s\",\n        \"premise-serviceorder-s\"\n    ]\n}"
 				},
 				"url": {
-					"raw": "http://{{work-scaler-host}}/api/workers/support",
-					"protocol": "http",
+					"raw": "https://{{work-scaler-host}}/api/workers",
+					"protocol": "https",
 					"host": [
 						"{{work-scaler-host}}"
 					],
 					"path": [
 						"api",
-						"workers",
-						"support"
+						"workers"
 					]
 				}
 			},
