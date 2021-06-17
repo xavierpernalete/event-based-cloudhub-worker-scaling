@@ -6,7 +6,7 @@ Mule applications or APIs are deployed into Anypoint CloudHub (CH) with an initi
 - a retailer may anticipate increased product inquiries during an upcoming promotional campaign to be launched in the next few days, or 
 - a utility may expect higher incident reports when a storm is forecasted to move into an area in the next few hours. 
 
-In anticipation of such events that will bring adidtional workload/traffic to relevant Mule apps, operations personnel may want to prepare these Mule apps with additional workers to handle extra workload *before* the event occurs. Hence the solution for Event-based Scaling was created to address such scenarios.
+In anticipation of such events that will bring additional workload/traffic to relevant Mule apps, operations personnel may want to prepare these Mule apps with additional workers to handle extra workload *before* the event occurs. Hence the solution for Event-based Scaling was created to address such scenarios.
 
 ## Scope
 
