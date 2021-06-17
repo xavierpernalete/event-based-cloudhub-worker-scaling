@@ -44,6 +44,7 @@ vars.mule_apps + vars.member]]></ee:set-payload>
 					</ee:message>
 				</ee:transform>
 				<set-variable value="#[payload]" doc:name="Set Variable" doc:id="26f49d90-e011-4542-bb64-6f3ac039db00" variableName="mule_apps"/>
+				<logger level="INFO" doc:name="Logger" doc:id="ca520eb3-f40d-4a9b-aab3-0e6bd8f345d7" message="vars.group_id: #[vars.group_id]"/>
 				<os:store doc:name="Store" doc:id="7ccc2d11-a5a0-41e1-9c8b-91e6338a5bfb" key="#[vars.group_id]" objectStore="Object_store" />
 			</when>
 			<otherwise >

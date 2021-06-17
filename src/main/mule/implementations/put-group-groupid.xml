@@ -26,6 +26,7 @@ output application/java
 attributes.uriParams.'groupId']]></ee:set-variable>
 			</ee:variables>
 		</ee:transform>
+		<logger level="INFO" doc:name="Logger" doc:id="5527df10-3a49-4e0a-b9fe-b6fe38edb34f" message="vars.group_id: #[vars.group_id]"/>
 		<os:store doc:name="Store" doc:id="f18fba9a-3903-4394-96b9-5b06b300b602" key='#[vars."group_id"]' objectStore="Object_store">
 			<os:value ><![CDATA[#[vars.mule_apps]]]></os:value>
 		</os:store>
