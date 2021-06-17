@@ -18,7 +18,7 @@ The audience of this solution includes Operations personnel responsible for Mule
 
 # Background on CloudHub Worker scaling
 
-Event-based Scaling addresses different use cases than the CH's Auto-Scaling feature. The latter is made available to certain MuleSoft customers. CH's Auto-Scaling feature scales the number of workers when CPU or memory exceeds certain pre-set thresholds. This means worker scaling takes place *after* an event has occurred which caused the spikes in CPU/memory usage by workers. There is an asset that provides solution for customers who do not have CH's Auto-Scaling enabled but still desire similar features: https://knowledgehub.mulesoft.com/s/article/Custom-Framework-for-Autoscaling-in-CloudHub
+Event-based Scaling solution addresses different use cases than the CH's Auto-Scaling feature. The latter is made available to certain MuleSoft customers. CH's Auto-Scaling feature scales the number of workers horizontally when CPU or memory exceeds certain pre-set thresholds. This means worker scaling takes place *after* an event has occurred which caused the spikes in CPU/memory usage by workers. There is another asset that provides solution for customers who do not have CH's Auto-Scaling enabled but still desire similar features: https://knowledgehub.mulesoft.com/s/article/Custom-Framework-for-Autoscaling-in-CloudHub
 
 # Solution
 
@@ -26,7 +26,7 @@ The Event-based Scaling API solution gives control to customers in determining w
 
 The following Message Sequence Diagram illustrates the features in the solution grouped as followed:
 1. Group operations: Provides the ability to group a number of Mule apps in group names. Multiple groups can be created and maintained through their own lifecycles. Group is a useful way to collect a number of Mule apps that can be scaled together in response to an external event.
-2. Worker scaling: One or more Mule apps to be scaled horizontally, either to an exact number of workers, or by incremental numbers (both add or remove). Group is supported.
+2. Worker scaling: One or more Mule apps to be scaled, either to an exact number of workers, or by incremental numbers (both add or remove). Group is supported.
 3. Worker lifecycle: In addition to worker scaling, this solution includes lifecyle operations for Mule apps. This is useful to work on a list of Mule apps or by their associated groups. Currently supported actions for workers include START, STOP, RESTART and DELETE.
 
 
@@ -36,9 +36,9 @@ The following Message Sequence Diagram illustrates the features in the solution 
 ### `src/main/resources/properties.yaml`: 
 - properties used by this API.
 ### `src/main/resources/secure-props.yaml`:
-- The encryption key is stored under `mule.encryption.key` in `global.xml`
+- All entries here are encrypted. The encryption key is stored under `mule.encryption.key` in `global.xml`
 - Provide Organization and Environment IDs for this API to work with.
-- Create a Connected Appss entry `WorkerScaler` under Anypoint Access Management, with scopes of `Runtime Manager > Manage Settings` and `Runtime Manager > Read Applications`  
+- Create a Connected Apps entry `WorkerScaler` under Anypoint Access Management, with scopes of `Runtime Manager > Manage Settings` and `Runtime Manager > Read Applications`. Once the Connected App is created, get the associated `client_id` and `client_secret` and enter them here.
 
 ```
 cloudhub:
